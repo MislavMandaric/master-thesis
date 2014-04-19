@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace TrafficSignSystem.Library
 {
-    public interface IDetection : ITrainable
+    public interface IDetection
     {
-        OpenCV.Net.Seq Detect(Parameters parameters);
+        OpenCV.Net.Rect[] Detect(Parameters parameters);
     }
 }

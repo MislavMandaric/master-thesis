@@ -46,16 +46,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IDetection.cs" />
-    <Compile Include="IRecognition.cs" />
-    <Compile Include="ITrainable.cs" />
+    <Compile Include="Factories\DetectionFactory.cs" />
+    <Compile Include="Interfaces\IDetection.cs" />
+    <Compile Include="Interfaces\IRecognition.cs" />
+    <Compile Include="Interfaces\ITrainable.cs" />
     <Compile Include="Parameters.cs" />
-    <Compile Include="ParametersEnum.cs" />
+    <Compile Include="Enums\ParametersEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Factories\RecognitionFactory.cs" />
     <Compile Include="TrafficSignException.cs" />
     <Compile Include="TrafficSystem.cs" />
-    <Compile Include="TrainableFactory.cs" />
-    <Compile Include="VerbsEnum.cs" />
+    <Compile Include="Factories\TrainableFactory.cs" />
+    <Compile Include="Enums\VerbsEnum.cs" />
     <Compile Include="ViolaJonesDetector.cs" />
   </ItemGroup>
   <ItemGroup>

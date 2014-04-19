@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace TrafficSignSystem.Library
 {
-    public class ViolaJonesDetector : IDetection
+    public class ViolaJonesDetector : IDetection, ITrainable
     {
         private const string CASCADE_MODE = "ALL";
         private const string FEATURE_TYPE = "LBP";
@@ -39,7 +39,7 @@ namespace TrafficSignSystem.Library
             _haarCascadeFile = haarCascadeFile;
         }
 
-        public OpenCV.Net.Seq Detect(Parameters parameters)
+        public OpenCV.Net.Rect[] Detect(Parameters parameters)
         {
             OpenCV.Net.Arr image;
             if (parameters.TryGetValueByType(ParametersEnum.IMAGE, out image))
@@ -49,7 +49,7 @@ namespace TrafficSignSystem.Library
                 OpenCV.Net.CV.EqualizeHist(grayscaleImage, grayscaleImage);
                 using (OpenCV.Net.MemStorage storage = new OpenCV.Net.MemStorage())
                 using (OpenCV.Net.Seq sequence = this.HaarCascadeClassifier.DetectObjects(grayscaleImage, storage, SCALE_FACTOR))
-                    return sequence;
+                    return sequence.ToArray<OpenCV.Net.Rect>();
             }
             else
                 return null;

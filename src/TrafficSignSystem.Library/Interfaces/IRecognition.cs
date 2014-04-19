@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TrafficSignSystem.Library
 {
-    public interface IRecognition : ITrainable
+    public interface IRecognition
     {
         T Recognize<T>(Parameters parameters);
     }
