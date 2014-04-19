@@ -11,7 +11,7 @@ namespace TrafficSignSystem.Library
         public const string POSITIVE_FILE = "PositiveFile";
         public const string NEGATIVE_FILE = "NegativeFile";
         public const string VECTOR_FILE = "VectorFile";
-        public const string CASCADE_FILE = "CascadeFile";
+        public const string CASCADE_FOLDER = "CascadeFolder";
         public const string TOTAL_POSITIVE = "TotalPositive";
         public const string TOTAL_NEGATIVE = "TotalNegative";
         public const string IMAGE = "Image";

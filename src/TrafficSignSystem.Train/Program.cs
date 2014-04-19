@@ -9,9 +9,9 @@ using TrafficSignSystem.Library;
 
 namespace TrafficSignSystem.Train
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             string invokedVerb = "";
             object invokedsubOptions = null;
@@ -24,11 +24,20 @@ namespace TrafficSignSystem.Train
             {
                 Parameters parameters = new Parameters();
                 foreach (var property in invokedsubOptions.GetType().GetProperties())
-                {
                     parameters.Add(property.Name, property.GetValue(invokedsubOptions, null));
-                }
                 TrafficSystem system = new TrafficSystem();
-                system.Train(invokedVerb, parameters);
+                try
+                {
+                    if (system.Train(invokedVerb, parameters))
+                        Console.WriteLine("\nFinished succesfully.");
+                    else
+                        Console.WriteLine("\nError occured. Please try again.");
+                }
+                catch (TrafficSignException e)
+                {
+                    Console.WriteLine("\nError occured. Please try again.");
+                    Console.WriteLine(e.Message);
+                }
             }
         }
     }

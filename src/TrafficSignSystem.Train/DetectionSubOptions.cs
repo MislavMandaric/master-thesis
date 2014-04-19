@@ -15,8 +15,8 @@ namespace TrafficSignSystem.Train
         public string NegativeFile { get; set; }
         [Option('v', "vector_file", Required = true, HelpText = "Path to file with vector description of the positive images.")]
         public string VectorFile { get; set; }
-        [Option('c', "cascade_file", Required = true, HelpText = "Path to file with cascade description.")]
-        public string CascadeFile { get; set; }
+        [Option('c', "cascade_folder", Required = true, HelpText = "Path to folder with cascade files.")]
+        public string CascadeFolder { get; set; }
         [Option("total_positive", Required = true, HelpText = "Total number of positive images.")]
         public int TotalPositive { get; set; }
         [Option("total_negative", Required = true, HelpText = "Total number of negative images.")]

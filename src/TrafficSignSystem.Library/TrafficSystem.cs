@@ -13,10 +13,10 @@ namespace TrafficSignSystem.Library
 
         }
 
-        public void Train(string algorithm, Parameters parameters)
+        public bool Train(string algorithm, Parameters parameters)
         {
             ITrainable training = TrainableFactory.GetTrainable(algorithm, parameters);
-            training.Train(parameters);
+            return training.Train(parameters);
         }
     }
 }

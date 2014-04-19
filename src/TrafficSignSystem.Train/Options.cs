@@ -11,6 +11,7 @@ namespace TrafficSignSystem.Train
     public class Options
     {
         private const string PROGRAM_NAME = "Train";
+        private const string VERSION = "1.0";
         private const string AUTOHOR_NAME = "Mislav Mandarić";
         private const int YEAR = 2014;
         private const string USAGE_TEXT = "Usage:\ttrain.exe [verb] [params]\nHelp:\ttrain.exe help\n\ttrain.exe [verb] help";
@@ -30,7 +31,7 @@ namespace TrafficSignSystem.Train
         public string GetUsage(string verb)
         {
             HelpText help = HelpText.AutoBuild(this, verb);
-            help.Heading = new HeadingInfo(PROGRAM_NAME);
+            help.Heading = new HeadingInfo(PROGRAM_NAME, VERSION);
             help.Copyright = new CopyrightInfo(AUTOHOR_NAME, YEAR);
             help.AddPreOptionsLine(USAGE_TEXT);
             return help;

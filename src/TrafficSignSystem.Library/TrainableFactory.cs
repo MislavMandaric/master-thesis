@@ -8,20 +8,16 @@ namespace TrafficSignSystem.Library
 {
     public class TrainableFactory
     {
-        public static ITrainable GetTrainable(string verb, Parameters parameters)
+        public static ITrainable GetTrainable(string algorithm, Parameters parameters)
         {
-            switch (verb)
+            switch (algorithm)
             {
-                case "detection":
-                    string cascadeFile;
-                    if (parameters.TryGetValueByType(ParametersEnum.CASCADE_FILE, out cascadeFile))
-                        return new ViolaJonesDetector(cascadeFile);
-                    else
-                        throw new NotImplementedException();
-                case "recognition":
+                case VerbsEnum.DETECTION:
+                    return new ViolaJonesDetector();
+                case VerbsEnum.RECOGNITION:
                     throw new NotImplementedException();
                 default:
-                    throw new NotImplementedException();
+                    throw new TrafficSignException("Algorithm not supported.");
             }
         }
     }
