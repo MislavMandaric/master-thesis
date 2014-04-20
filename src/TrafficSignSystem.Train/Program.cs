@@ -24,7 +24,7 @@ namespace TrafficSignSystem.Train
             {
                 Parameters parameters = new Parameters();
                 foreach (var property in invokedsubOptions.GetType().GetProperties())
-                    parameters.Add(property.Name, property.GetValue(invokedsubOptions, null));
+                    parameters[property.Name] = property.GetValue(invokedsubOptions, null);
                 TrafficSystem system = new TrafficSystem();
                 try
                 {

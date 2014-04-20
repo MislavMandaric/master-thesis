@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\ClassesEnum.cs" />
     <Compile Include="Factories\DetectionFactory.cs" />
     <Compile Include="Interfaces\IDetection.cs" />
     <Compile Include="Interfaces\IRecognition.cs" />

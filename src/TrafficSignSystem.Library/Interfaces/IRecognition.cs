@@ -8,6 +8,6 @@ namespace TrafficSignSystem.Library
 {
     public interface IRecognition
     {
-        T Recognize<T>(Parameters parameters);
+        string Recognize(Parameters parameters);
     }
 }
