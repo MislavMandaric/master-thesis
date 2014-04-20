@@ -28,12 +28,10 @@ namespace TrafficSignSystem.Train
                 TrafficSystem system = new TrafficSystem();
                 try
                 {
-                    if (system.Train(invokedVerb, parameters))
-                        Console.WriteLine("\nFinished succesfully.");
-                    else
-                        Console.WriteLine("\nError occured. Please try again.");
+                    system.Train(invokedVerb, parameters);
+                    Console.WriteLine("\nFinished succesfully.");
                 }
-                catch (TrafficSignException e)
+                catch (Exception e)
                 {
                     Console.WriteLine("\nError occured. Please try again.");
                     Console.WriteLine(e.Message);

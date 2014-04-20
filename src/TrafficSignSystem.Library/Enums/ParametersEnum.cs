@@ -13,6 +13,7 @@ namespace TrafficSignSystem.Library
         public const string VECTOR_FILE = "VectorFile";
         public const string CASCADE_FILE = "CascadeFile";
         public const string VIDEO_FILE = "VideoFile";
+        public const string RESULTS_FILE = "ResultsFile";
 
         public const string CASCADE_FOLDER = "CascadeFolder";
 

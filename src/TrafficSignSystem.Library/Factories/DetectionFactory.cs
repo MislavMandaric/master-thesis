@@ -11,10 +11,9 @@ namespace TrafficSignSystem.Library
         public static IDetection GetDetection(string algorithm, Parameters parameters)
         {
             string haarCascadeFile;
-            if (parameters.TryGetValueByType(ParametersEnum.CASCADE_FILE, out haarCascadeFile))
-                return new ViolaJonesDetector(haarCascadeFile);
-            else
+            if (!parameters.TryGetValueByType(ParametersEnum.CASCADE_FILE, out haarCascadeFile))
                 throw new TrafficSignException("Path to haar cascade file is required parameter.");
+            return new ViolaJonesDetector(haarCascadeFile);
         }
     }
 }
