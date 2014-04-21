@@ -41,10 +41,10 @@ namespace TrafficSignSystem.Library
 
         public OpenCV.Net.Rect[] Detect(Parameters parameters)
         {
-            OpenCV.Net.Arr image;
+            OpenCV.Net.IplImage image;
             if (!parameters.TryGetValueByType(ParametersEnum.IMAGE, out image))
                 throw new TrafficSignException("Invalid parameters.");
-            OpenCV.Net.Arr grayscaleImage = null;
+            OpenCV.Net.IplImage grayscaleImage = new OpenCV.Net.IplImage(image.Size, image.Depth, 1);
             OpenCV.Net.CV.CvtColor(image, grayscaleImage, OpenCV.Net.ColorConversion.Bgr2Gray);
             OpenCV.Net.CV.EqualizeHist(grayscaleImage, grayscaleImage);
             using (OpenCV.Net.MemStorage storage = new OpenCV.Net.MemStorage())
