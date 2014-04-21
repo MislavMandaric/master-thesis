@@ -13,6 +13,12 @@ namespace TrafficSignSystem.Train
     {
         public static void Main(string[] args)
         {
+            //TrafficSystem system = new TrafficSystem();
+            //Parameters parameters = new Parameters();
+            //parameters[ParametersEnum.CASCADE_FILE] = @"C:\opencv\sources\data\haarcascades\haarcascade_fullbody.xml";
+            //parameters[ParametersEnum.VIDEO_FILE] = @"C:\Users\Mislav\Desktop\OneStopNoEnter2cor.mpg";
+            //system.Run("", "", parameters);
+
             string invokedVerb = "";
             object invokedsubOptions = null;
             Options options = new Options();

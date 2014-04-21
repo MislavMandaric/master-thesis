@@ -4,11 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OpenCvSharp;
 
 namespace TrafficSignSystem.Library
 {
     public class TrafficSystem
     {
+        private const int ESC = 27;
+
         public void Run(string detectionAlgorithm, string recognitionAlgorithm, Parameters parameters)
         {
             string videoFile;
@@ -16,29 +19,32 @@ namespace TrafficSignSystem.Library
                 throw new TrafficSignException("Invalid parameters.");
             IDetection detection = DetectionFactory.GetDetection(detectionAlgorithm, parameters);
             IRecognition recognition = RecognitionFactory.GetRecognition(recognitionAlgorithm, parameters);
-            using (OpenCV.Net.Capture videoCapture = OpenCV.Net.Capture.CreateFileCapture(videoFile))
-            using (OpenCV.Net.NamedWindow window = new OpenCV.Net.NamedWindow("Traffic sign system"))
+            using (CvCapture videoCapture = CvCapture.FromFile(videoFile))
+            using (CvWindow window = new CvWindow("Traffic sign system"))
             {
-                if (videoCapture.IsClosed)
+                if (videoCapture == null)
                     throw new TrafficSignException("Could not open video file.");
-                while (videoCapture.GrabFrame())
+                while (videoCapture.GrabFrame() > 0)
                 {
-                    using (OpenCV.Net.IplImage image = videoCapture.RetrieveFrame())
+                    using (IplImage image = videoCapture.RetrieveFrame())
                     {
                         parameters[ParametersEnum.IMAGE] = image;
-                        OpenCV.Net.Rect[] detections = detection.Detect(parameters);
-                        foreach (OpenCV.Net.Rect rectangle in detections)
+                        using (CvSeq detections = detection.Detect(parameters))
                         {
-                            OpenCV.Net.CV.Rectangle(image, rectangle, OpenCV.Net.Scalar.Rgb(0, 255, 0));
-                            using (OpenCV.Net.IplImage signImage = image.GetSubRect(rectangle))
+                            for (int i = 0; i < detections.Total; i++)
                             {
-                                parameters[ParametersEnum.IMAGE] = signImage;
-                                string recognizedClass = recognition.Recognize(parameters);
+                                CvRect rectangle = (CvRect)detections.GetSeqElem<CvRect>(i);
+                                image.Rectangle(rectangle, CvScalar.ScalarAll(255));
+                                using (IplImage signImage = image.GetSubImage(rectangle))
+                                {
+                                    parameters[ParametersEnum.IMAGE] = signImage;
+                                    string recognizedClass = recognition.Recognize(parameters);
+                                }
                             }
                         }
                         window.ShowImage(image);
                     }
-                    if (OpenCV.Net.CV.WaitKey(1) == 27)
+                    if (Cv.WaitKey(1) == ESC)
                         break;
                 }
             }
@@ -63,18 +69,18 @@ namespace TrafficSignSystem.Library
                 while (!reader.EndOfStream)
                 {
                     string file = reader.ReadLine().Split(';')[0];
-                    using (OpenCV.Net.Arr image = OpenCV.Net.CV.LoadImageM(file, OpenCV.Net.LoadImageFlags.Color))
+                    using (IplImage image = new IplImage(file))
                     {
                         parameters[ParametersEnum.IMAGE] = image;
-                        OpenCV.Net.Rect[] detections = detection.Detect(parameters);
-                        if (detections.Length == 0)
+                        CvSeq detections = detection.Detect(parameters);
+                        if (detections.Total == 0)
                             falseNegative++;
-                        else if (detections.Length == 1)
+                        else if (detections.Total == 1)
                             truePositive++;
-                        else if (detections.Length >= 2)
+                        else if (detections.Total >= 2)
                         {
                             truePositive++;
-                            falsePositive = detections.Length - 1;
+                            falsePositive = detections.Total - 1;
                         }
                     }
                 }
@@ -84,14 +90,14 @@ namespace TrafficSignSystem.Library
                 while (!reader.EndOfStream)
                 {
                     string file = reader.ReadLine().Split(';')[0];
-                    using (OpenCV.Net.Arr image = OpenCV.Net.CV.LoadImageM(file, OpenCV.Net.LoadImageFlags.Color))
+                    using (IplImage image = new IplImage(file))
                     {
                         parameters[ParametersEnum.IMAGE] = image;
-                        OpenCV.Net.Rect[] detections = detection.Detect(parameters);
-                        if (detections.Length == 0)
+                        CvSeq detections = detection.Detect(parameters);
+                        if (detections.Total == 0)
                             trueNegative++;
-                        else if (detections.Length >= 1)
-                            falsePositive = detections.Length;
+                        else if (detections.Total >= 1)
+                            falsePositive = detections.Total;
                     }
                 }
             }

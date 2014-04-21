@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OpenCvSharp;
 
 namespace TrafficSignSystem.Library
 {
@@ -20,14 +21,14 @@ namespace TrafficSignSystem.Library
         private const float SCALE_FACTOR = 1.2f;
 
         private string _haarCascadeFile;
-        private OpenCV.Net.HaarClassifierCascade _haarCascadeClassifier;
+        private CvHaarClassifierCascade _haarCascadeClassifier;
 
-        public OpenCV.Net.HaarClassifierCascade HaarCascadeClassifier
+        public CvHaarClassifierCascade HaarCascadeClassifier
         {
             get
             {
                 if (_haarCascadeClassifier == null)
-                    _haarCascadeClassifier = OpenCV.Net.HaarClassifierCascade.Load(_haarCascadeFile);
+                    _haarCascadeClassifier = CvHaarClassifierCascade.FromFile(_haarCascadeFile);
                 return _haarCascadeClassifier;
             }
         }
@@ -39,17 +40,18 @@ namespace TrafficSignSystem.Library
             _haarCascadeFile = haarCascadeFile;
         }
 
-        public OpenCV.Net.Rect[] Detect(Parameters parameters)
+        public CvSeq Detect(Parameters parameters)
         {
-            OpenCV.Net.IplImage image;
+            IplImage image;
             if (!parameters.TryGetValueByType(ParametersEnum.IMAGE, out image))
                 throw new TrafficSignException("Invalid parameters.");
-            OpenCV.Net.IplImage grayscaleImage = new OpenCV.Net.IplImage(image.Size, image.Depth, 1);
-            OpenCV.Net.CV.CvtColor(image, grayscaleImage, OpenCV.Net.ColorConversion.Bgr2Gray);
-            OpenCV.Net.CV.EqualizeHist(grayscaleImage, grayscaleImage);
-            using (OpenCV.Net.MemStorage storage = new OpenCV.Net.MemStorage())
-            using (OpenCV.Net.Seq sequence = this.HaarCascadeClassifier.DetectObjects(grayscaleImage, storage, SCALE_FACTOR))
-                return sequence.ToArray<OpenCV.Net.Rect>();
+            using (IplImage grayscaleImage = new IplImage(image.Size, image.Depth, 1))
+            {
+                Cv.CvtColor(image, grayscaleImage, ColorConversion.BgrToGray);
+                Cv.EqualizeHist(grayscaleImage, grayscaleImage);
+                CvMemStorage storage = new CvMemStorage();
+                return this.HaarCascadeClassifier.HaarDetectObjects(grayscaleImage, storage, SCALE_FACTOR);
+            }
         }
 
         public bool Train(Parameters parameters)
