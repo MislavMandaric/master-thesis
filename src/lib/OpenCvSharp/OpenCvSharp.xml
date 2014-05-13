@@ -5042,7 +5042,7 @@
             CvLevMarq
             </summary>
         </member>
-        <member name="F:OpenCvSharp.CvLevMarq.disposed">
+        <member name="F:OpenCvSharp.CvLevMarq._disposed">
             <summary>
             Track whether Dispose has been called
             </summary>
@@ -5056,13 +5056,27 @@
             If false, the method has been called by the runtime from inside the finalizer and you should not reference other objects. Only unmanaged resources can be disposed.
             </param>
         </member>
+        <member name="F:OpenCvSharp.CvModelEstimator2._disposed">
+            <summary>
+            Track whether Dispose has been called
+            </summary>
+        </member>
         <member name="M:OpenCvSharp.CvModelEstimator2.#ctor(System.Int32,OpenCvSharp.CvSize,System.Int32)">
             <summary>
             
             </summary>
-            <param name="modelPoints"></param>
-            <param name="modelSize"></param>
-            <param name="maxBasicSolutions"></param>
+            <param name="_modelPoints"></param>
+            <param name="_modelSize"></param>
+            <param name="_maxBasicSolutions"></param>
+        </member>
+        <member name="M:OpenCvSharp.CvModelEstimator2.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">
+            If disposing equals true, the method has been called directly or indirectly by a user's code. Managed and unmanaged resources can be disposed.
+            If false, the method has been called by the runtime from inside the finalizer and you should not reference other objects. Only unmanaged resources can be disposed.
+            </param>
         </member>
         <member name="M:OpenCvSharp.CvModelEstimator2.RunKernel(OpenCvSharp.CvMat,OpenCvSharp.CvMat,OpenCvSharp.CvMat)">
             <summary>
@@ -5094,11 +5108,25 @@
             CvLevMarq
             </summary>
         </member>
+        <member name="F:OpenCvSharp.CvHomographyEstimator._disposed">
+            <summary>
+            Track whether Dispose has been called
+            </summary>
+        </member>
         <member name="M:OpenCvSharp.CvHomographyEstimator.#ctor(System.Int32)">
             <summary>
             
             </summary>
-            <param name="modelPoints"></param>
+            <param name="_modelPoints"></param>
+        </member>
+        <member name="M:OpenCvSharp.CvHomographyEstimator.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">
+            If disposing equals true, the method has been called directly or indirectly by a user's code. Managed and unmanaged resources can be disposed.
+            If false, the method has been called by the runtime from inside the finalizer and you should not reference other objects. Only unmanaged resources can be disposed.
+            </param>
         </member>
         <member name="M:OpenCvSharp.CvHomographyEstimator.RunKernel(OpenCvSharp.CvMat,OpenCvSharp.CvMat,OpenCvSharp.CvMat)">
             <summary>
@@ -5172,7 +5200,7 @@
             structure contains the bounding box and confidence level for detected object 
             </summary>
         </member>
-        <member name="F:OpenCvSharp.CvLatentSvmDetector.disposed">
+        <member name="F:OpenCvSharp.CvLatentSvmDetector._disposed">
             <summary>
             Track whether Dispose has been called
             </summary>
@@ -16475,7 +16503,7 @@
             <param name="mat"></param>
             <param name="row"></param>
             <param name="col"></param>
-            <param name="pixSize"></param>
+            <param name="pix_size"></param>
             <returns></returns>
         </member>
         <member name="M:OpenCvSharp.Cv.MAT_ELEM_PTR(OpenCvSharp.CvMat,System.Int32,System.Int32)">
@@ -16514,7 +16542,7 @@
             <summary>
             
             </summary>
-            <param name="elemSize"></param>
+            <param name="elem_size"></param>
             <param name="reader"></param>
         </member>
         <member name="M:OpenCvSharp.Cv.NODE_IDX(OpenCvSharp.CvSparseMat,OpenCvSharp.CvSparseNode)">
@@ -16623,7 +16651,7 @@
             <summary>
             
             </summary>
-            <param name="elemSize"></param>
+            <param name="elem_size"></param>
             <param name="reader"></param>
         </member>
         <member name="M:OpenCvSharp.Cv.READ_SEQ_ELEM``1(``0@,OpenCvSharp.CvSeqReader)">
@@ -16658,12 +16686,13 @@
             <param name="edge"></param>
             <returns></returns>
         </member>
-        <member name="M:OpenCvSharp.Cv.SWAP(System.Object@,System.Object@)">
+        <member name="M:OpenCvSharp.Cv.SWAP(System.Object@,System.Object@,System.Object@)">
             <summary>
             
             </summary>
             <param name="a"></param>
             <param name="b"></param>
+            <param name="t"></param>
         </member>
         <member name="M:OpenCvSharp.Cv.SWAP``1(``0@,``0@)">
             <summary>
@@ -17268,7 +17297,7 @@
             Button that is used on Qt Window
             </summary>
         </member>
-        <member name="F:OpenCvSharp.CvButton.disposed">
+        <member name="F:OpenCvSharp.CvButton._disposed">
             <summary>
             Track whether Dispose has been called
             </summary>
@@ -18263,7 +18292,7 @@
             A balanced kd-tree index of feature vectors
             </summary>
         </member>
-        <member name="F:OpenCvSharp.CvFeatureTree.disposed">
+        <member name="F:OpenCvSharp.CvFeatureTree._disposed">
             <summary>
             Track whether Dispose has been called
             </summary>
@@ -18426,7 +18455,7 @@
             CvGraphScanner
             </summary>
         </member>
-        <member name="F:OpenCvSharp.CvGraphScanner.disposed">
+        <member name="F:OpenCvSharp.CvGraphScanner._disposed">
             <summary>
             Track whether Dispose has been called
             </summary>
@@ -18945,7 +18974,7 @@
             Structure containing object information
             </summary>
         </member>
-        <member name="F:OpenCvSharp.CvPOSITObject.disposed">
+        <member name="F:OpenCvSharp.CvPOSITObject._disposed">
             <summary>
             Track whether Dispose has been called
             </summary>
@@ -18975,11 +19004,11 @@
             <summary>
             Implements POSIT algorithm
             </summary>
-            <param name="imagePoints">Object points projections on the 2D image plane.</param>
-            <param name="focalLength">Focal length of the camera used.</param>
+            <param name="image_points">Object points projections on the 2D image plane.</param>
+            <param name="focal_length">Focal length of the camera used.</param>
             <param name="criteria">Termination criteria of the iterative POSIT algorithm.</param>
-            <param name="rotationMatrix">Matrix of rotations.</param>
-            <param name="translationVector">Translation vector.</param>
+            <param name="rotation_matrix">Matrix of rotations.</param>
+            <param name="translation_vector">Translation vector.</param>
         </member>
         <member name="T:OpenCvSharp.CvRandState">
             <summary>
@@ -22277,7 +22306,7 @@
             Kalman filter state
             </summary>
         </member>
-        <member name="F:OpenCvSharp.CvKalman.disposed">
+        <member name="F:OpenCvSharp.CvKalman._disposed">
             <summary>
             Track whether Dispose has been called
             </summary>
@@ -22286,17 +22315,17 @@
             <summary>
             Allocates Kalman filter structure
             </summary>
-            <param name="dynamParams">dimensionality of the state vector </param>
-            <param name="measureParams">dimensionality of the measurement vector </param>
+            <param name="dynam_params">dimensionality of the state vector </param>
+            <param name="measure_params">dimensionality of the measurement vector </param>
             <returns></returns>
         </member>
         <member name="M:OpenCvSharp.CvKalman.#ctor(System.Int32,System.Int32,System.Int32)">
             <summary>
             Allocates Kalman filter structure
             </summary>
-            <param name="dynamParams">dimensionality of the state vector </param>
-            <param name="measureParams">dimensionality of the measurement vector </param>
-            <param name="controlParams">dimensionality of the control vector </param>
+            <param name="dynam_params">dimensionality of the state vector </param>
+            <param name="measure_params">dimensionality of the measurement vector </param>
+            <param name="control_params">dimensionality of the control vector </param>
             <returns></returns>
         </member>
         <member name="M:OpenCvSharp.CvKalman.#ctor(System.IntPtr)">
@@ -22516,7 +22545,7 @@
             The structure for block matching stereo correspondence algorithm
             </summary>
         </member>
-        <member name="F:OpenCvSharp.CvStereoBMState.disposed">
+        <member name="F:OpenCvSharp.CvStereoBMState._disposed">
             <summary>
             Track whether Dispose has been called
             </summary>
@@ -24425,7 +24454,7 @@
             Growing memory storage
             </summary>
         </member>
-        <member name="F:OpenCvSharp.CvMemStorage.disposed">
+        <member name="F:OpenCvSharp.CvMemStorage._disposed">
             <summary>
             Track whether Dispose has been called
             </summary>
@@ -24439,7 +24468,7 @@
             <summary>
             Creates memory storage
             </summary>
-            <param name="blockSize">Size of the storage blocks in bytes. If it is 0, the block size is set to default value - currently it is ≈64K. </param>
+            <param name="block_size">Size of the storage blocks in bytes. If it is 0, the block size is set to default value - currently it is ≈64K. </param>
         </member>
         <member name="M:OpenCvSharp.CvMemStorage.#ctor(System.IntPtr)">
             <summary>
@@ -27871,12 +27900,12 @@
             Video capturing class 
             </summary>
         </member>
-        <member name="F:OpenCvSharp.CvCapture.captureType">
+        <member name="F:OpenCvSharp.CvCapture._captureType">
             <summary>
             Capture type (File or Camera)
             </summary>
         </member>
-        <member name="F:OpenCvSharp.CvCapture.disposed">
+        <member name="F:OpenCvSharp.CvCapture._disposed">
             <summary>
             Track whether Dispose has been called
             </summary>
@@ -31216,7 +31245,7 @@
             Trackbar that is shown on CvWindow
             </summary>
         </member>
-        <member name="F:OpenCvSharp.CvTrackbar.disposed">
+        <member name="F:OpenCvSharp.CvTrackbar._disposed">
             <summary>
             Track whether Dispose has been called
             </summary>
@@ -31490,6 +31519,12 @@
             </summary>
             <param name="images"></param>
             <param name="names"></param>
+        </member>
+        <member name="M:OpenCvSharp.CvWindow.ShowImages(System.Object[])">
+            <summary>
+            
+            </summary>
+            <param name="imagesAndNames"></param>
         </member>
         <member name="M:OpenCvSharp.CvWindow.GetWindowByName(System.String)">
             <summary>

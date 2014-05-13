@@ -8,49 +8,37 @@ using OpenCvSharp;
 
 namespace TrafficSignSystem.Library
 {
-    public class ViolaJonesDetector : IDetection, ITrainable
+    public class ViolaJonesDetector : IDetection
     {
-        private const string CASCADE_MODE = "ALL";
-        private const string FEATURE_TYPE = "LBP";
+        private const string FEATURE_MODE = "BASIC";
+        private const string FEATURE_TYPE = "HAAR";
+        private const string BOOST_TYPE = "GAB";
         private const int BUFFER_SIZE = 1024;
         private const int WIDTH = 24;
         private const int HEIGHT = 24;
-        private const int STAGES = 20;
+        private const int STAGES = 10;
         private const float MIN_HIT_RATE = 0.995f;
         private const float MAX_FALSE_RATE = 0.4f;
-        private const float SCALE_FACTOR = 1.2f;
+        private const float SCALE_FACTOR = 1.1f;
 
-        private string _haarCascadeFile;
         private CvHaarClassifierCascade _haarCascadeClassifier;
-
-        public CvHaarClassifierCascade HaarCascadeClassifier
-        {
-            get
-            {
-                if (_haarCascadeClassifier == null)
-                    _haarCascadeClassifier = CvHaarClassifierCascade.FromFile(_haarCascadeFile);
-                return _haarCascadeClassifier;
-            }
-        }
 
         public ViolaJonesDetector() { }
 
         public ViolaJonesDetector(string haarCascadeFile)
         {
-            _haarCascadeFile = haarCascadeFile;
+            this._haarCascadeClassifier = CvHaarClassifierCascade.FromFile(haarCascadeFile);
         }
 
         public CvSeq Detect(Parameters parameters)
         {
-            IplImage image;
+            CvMat image;
             if (!parameters.TryGetValueByType(ParametersEnum.IMAGE, out image))
                 throw new TrafficSignException("Invalid parameters.");
-            using (IplImage grayscaleImage = new IplImage(image.Size, image.Depth, 1))
+            using (CvMat preprocessedImage = Preprocess.ViolaJonesPreprocess(image))
             {
-                Cv.CvtColor(image, grayscaleImage, ColorConversion.BgrToGray);
-                Cv.EqualizeHist(grayscaleImage, grayscaleImage);
                 CvMemStorage storage = new CvMemStorage();
-                return this.HaarCascadeClassifier.HaarDetectObjects(grayscaleImage, storage, SCALE_FACTOR);
+                return this._haarCascadeClassifier.HaarDetectObjects(preprocessedImage, storage, SCALE_FACTOR);
             }
         }
 
@@ -62,10 +50,10 @@ namespace TrafficSignSystem.Library
             string cascadeFolder;
             int totalPositive;
             int totalNegative;
-            if (!(parameters.TryGetValueByType(ParametersEnum.POSITIVE_FILE, out positiveFile) &&
-                parameters.TryGetValueByType(ParametersEnum.NEGATIVE_FILE, out negativeFile) &&
-                parameters.TryGetValueByType(ParametersEnum.VECTOR_FILE, out vectorFile) &&
-                parameters.TryGetValueByType(ParametersEnum.CASCADE_FOLDER, out cascadeFolder) &&
+            if (!(parameters.TryGetValueByType(ParametersEnum.VJ_POSITIVE_FILE, out positiveFile) &&
+                parameters.TryGetValueByType(ParametersEnum.VJ_NEGATIVE_FILE, out negativeFile) &&
+                parameters.TryGetValueByType(ParametersEnum.VJ_VECTOR_FILE, out vectorFile) &&
+                parameters.TryGetValueByType(ParametersEnum.VJ_CASCADE_FOLDER, out cascadeFolder) &&
                 parameters.TryGetValueByType(ParametersEnum.TOTAL_POSITIVE, out totalPositive) &&
                 parameters.TryGetValueByType(ParametersEnum.TOTAL_NEGATIVE, out totalNegative)))
                 throw new TrafficSignException("Invalid parameters.");
@@ -85,17 +73,19 @@ namespace TrafficSignSystem.Library
             builder.Append("-data ").Append(cascadeFolder)
                 .Append(" -vec ").Append(vectorFile)
                 .Append(" -bg ").Append(negativeFile)
-                .Append(" -numPos ").Append(0.9f * totalPositive)
+                .Append(" -numPos ").Append((int)(0.9f * totalPositive))
                 .Append(" -numNeg ").Append(totalNegative)
                 .Append(" -numStages ").Append(STAGES)
                 .Append(" -precalcValBufSize ").Append(BUFFER_SIZE)
                 .Append(" -precalcIdxBufSize ").Append(BUFFER_SIZE)
+                .Append(" -baseFormatSave ")
                 .Append(" -featureType ").Append(FEATURE_TYPE)
                 .Append(" -w ").Append(WIDTH)
                 .Append(" -h ").Append(HEIGHT)
+                .Append(" -bt ").Append(BOOST_TYPE)
                 .Append(" -minHitRate ").Append(MIN_HIT_RATE)
                 .Append(" -maxFalseAlarmRate ").Append(MAX_FALSE_RATE)
-                .Append(" -mode ").Append(CASCADE_MODE);
+                .Append(" -mode ").Append(FEATURE_MODE);
             using (Process process = Process.Start("opencv_traincascade.exe", builder.ToString()))
             {
                 process.WaitForExit();
@@ -103,6 +93,12 @@ namespace TrafficSignSystem.Library
                     return false;
             }
             return true;
+        }
+
+        public void Dispose()
+        {
+            if (this._haarCascadeClassifier != null)
+                this._haarCascadeClassifier.Dispose();
         }
     }
 }

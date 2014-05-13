@@ -37,9 +37,24 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\OpenCvSharp\OpenCvSharp.dll</HintPath>
     </Reference>
+    <Reference Include="OpenCvSharp.Blob">
+      <HintPath>..\lib\OpenCvSharp\OpenCvSharp.Blob.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenCvSharp.CPlusPlus">
+      <HintPath>..\lib\OpenCvSharp\OpenCvSharp.CPlusPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenCvSharp.DebuggerVisualizers">
+      <HintPath>..\lib\OpenCvSharp\OpenCvSharp.DebuggerVisualizers.dll</HintPath>
+    </Reference>
     <Reference Include="OpenCvSharp.Extensions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=6adad1e807fea099, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\OpenCvSharp\OpenCvSharp.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenCvSharp.MachineLearning">
+      <HintPath>..\lib\OpenCvSharp\OpenCvSharp.MachineLearning.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenCvSharp.UserInterface">
+      <HintPath>..\lib\OpenCvSharp\OpenCvSharp.UserInterface.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -59,11 +74,18 @@
     <Compile Include="Enums\ParametersEnum.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Factories\RecognitionFactory.cs" />
+    <Compile Include="RandomForestClassifier.cs" />
     <Compile Include="TrafficSignException.cs" />
     <Compile Include="TrafficSystem.cs" />
     <Compile Include="Factories\TrainableFactory.cs" />
-    <Compile Include="Enums\VerbsEnum.cs" />
+    <Compile Include="Enums\AlgorithmsEnum.cs" />
     <Compile Include="ViolaJonesDetector.cs" />
+    <Compile Include="Preprocess.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="OpenCvSharpExtern.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

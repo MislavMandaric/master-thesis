@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{093BA9
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficSignSystem.Train", "TrafficSignSystem.Train\TrafficSignSystem.Train.csproj", "{14BFE167-A1CB-4002-A602-F821E170651B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrafficSignSystem.Test", "TrafficSignSystem.Test\TrafficSignSystem.Test.csproj", "{F8D3966A-00A2-4F07-B281-7D3E59CCC4A7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,10 @@ Global
 		{14BFE167-A1CB-4002-A602-F821E170651B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14BFE167-A1CB-4002-A602-F821E170651B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14BFE167-A1CB-4002-A602-F821E170651B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8D3966A-00A2-4F07-B281-7D3E59CCC4A7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8D3966A-00A2-4F07-B281-7D3E59CCC4A7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8D3966A-00A2-4F07-B281-7D3E59CCC4A7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8D3966A-00A2-4F07-B281-7D3E59CCC4A7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

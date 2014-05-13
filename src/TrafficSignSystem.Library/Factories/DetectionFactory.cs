@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace TrafficSignSystem.Library
 {
-    public class DetectionFactory
+    public static class DetectionFactory
     {
         public static IDetection GetDetection(string algorithm, Parameters parameters)
         {
             string haarCascadeFile;
-            if (!parameters.TryGetValueByType(ParametersEnum.CASCADE_FILE, out haarCascadeFile))
-                throw new TrafficSignException("Path to haar cascade file is required parameter.");
-            return new ViolaJonesDetector(haarCascadeFile);
+            if (parameters.TryGetValueByType(ParametersEnum.VJ_CASCADE_FILE, out haarCascadeFile))
+                return new ViolaJonesDetector(haarCascadeFile);
+            else
+                return new ViolaJonesDetector();
         }
     }
 }

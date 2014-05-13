@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TrafficSignSystem.Library
 {
-    public interface ITrainable
+    public interface ITrainable : IDisposable
     {
         bool Train(Parameters parameters);
     }

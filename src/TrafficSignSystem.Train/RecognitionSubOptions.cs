@@ -9,5 +9,9 @@ namespace TrafficSignSystem.Train
 {
     public class RecognitionSubOptions
     {
+        [Option('m', "model_file", Required = true, HelpText = "Path to file with model.")]
+        public string ModelFile { get; set; }
+        [Option('t', "train_file", Required = true, HelpText = "Path to file with train data.")]
+        public string TrainFile { get; set; }
     }
 }

@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace TrafficSignSystem.Library
 {
-    public class TrainableFactory
+    public static class TrainableFactory
     {
-        public static ITrainable GetTrainable(string algorithm, Parameters parameters)
+        public static ITrainable GetTrainable(string type, string algorithm, Parameters parameters)
         {
-            switch (algorithm)
+            switch (type)
             {
-                case VerbsEnum.DETECTION:
-                    return new ViolaJonesDetector();
-                case VerbsEnum.RECOGNITION:
-                    throw new NotImplementedException();
+                case AlgorithmsEnum.DETECTION:
+                    return DetectionFactory.GetDetection(algorithm, parameters);
+                case AlgorithmsEnum.RECOGNITION:
+                    return RecognitionFactory.GetRecognition(algorithm, parameters);
                 default:
                     throw new TrafficSignException("Algorithm not supported.");
             }
