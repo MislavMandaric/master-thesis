@@ -54,8 +54,8 @@ namespace TrafficSignSystem.Library
                 parameters.TryGetValueByType(ParametersEnum.VJ_NEGATIVE_FILE, out negativeFile) &&
                 parameters.TryGetValueByType(ParametersEnum.VJ_VECTOR_FILE, out vectorFile) &&
                 parameters.TryGetValueByType(ParametersEnum.VJ_CASCADE_FOLDER, out cascadeFolder) &&
-                parameters.TryGetValueByType(ParametersEnum.TOTAL_POSITIVE, out totalPositive) &&
-                parameters.TryGetValueByType(ParametersEnum.TOTAL_NEGATIVE, out totalNegative)))
+                parameters.TryGetValueByType(ParametersEnum.VJ_TOTAL_POSITIVE, out totalPositive) &&
+                parameters.TryGetValueByType(ParametersEnum.VJ_TOTAL_NEGATIVE, out totalNegative)))
                 throw new TrafficSignException("Invalid parameters.");
             StringBuilder builder = new StringBuilder();
             builder.Append("-vec ").Append(vectorFile)

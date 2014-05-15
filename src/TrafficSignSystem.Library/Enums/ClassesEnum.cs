@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace TrafficSignSystem.Library
 {
-    public struct ClassesEnum
+    public enum ClassesEnum
     {
-        public const string SPEED_20 = "";
-        public const string SPEED_30 = "0";
-        public const string SPEED_40 = "1";
-        public const string SPEED_50 = "2";
-        public const string SPEED_60 = "3";
-        public const string SPEED_70 = "4";
-        public const string SPEED_80 = "";
-        public const string SPEED_90 = "";
-        public const string SPEED_100 = "";
-        public const string SPEED_110 = "";
-        public const string SPEED_120 = "";
-        public const string SPEED_130 = "";
+        speed20 = 20,
+        speed30 = 30,
+        speed40 = 40,
+        speed50 = 50,
+        speed60 = 60,
+        speed70 = 70,
+        speed80 = 80,
+        speed90 = 90,
+        speed100 = 100,
+        speed110 = 110,
+        speed120 = 120,
+        speed130 = 130
     }
 }

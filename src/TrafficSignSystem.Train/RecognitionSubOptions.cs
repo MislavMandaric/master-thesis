@@ -13,5 +13,7 @@ namespace TrafficSignSystem.Train
         public string ModelFile { get; set; }
         [Option('t', "train_file", Required = true, HelpText = "Path to file with train data.")]
         public string TrainFile { get; set; }
+        [Option('s', "total_samples", Required = true, HelpText = "Total number of samples.")]
+        public string TotalData { get; set; }
     }
 }

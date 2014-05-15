@@ -12,7 +12,11 @@ namespace TrafficSignSystem.Test
         static void Main(string[] args)
         {
             TrafficSystem system = new TrafficSystem();
-            system.TestRecognize("", null);
+            Parameters parameters = new Parameters();
+            parameters[ParametersEnum.RF_MODEL_FILE] = args[1];
+            parameters[ParametersEnum.RF_TEST_FILE] = args[2];
+            parameters[ParametersEnum.RF_RESULTS_FILE] = args[3];
+            system.TestRecognize(AlgorithmsEnum.RANDOM_FOREST, parameters);
         }
     }
 }
