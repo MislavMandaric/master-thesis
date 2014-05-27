@@ -21,21 +21,21 @@ namespace TrafficSignSystem.Library
             }
         }
 
-        private int totalData;
-        private IDictionary<string, bool> _classes;
+        private int _totalData;
+        private IDictionary<ClassesEnum, bool> _classes;
 
-        private IDictionary<string, int> _truePositives;
-        private IDictionary<string, int> _trueNegatives;
-        private IDictionary<string, int> _falsePositives;
-        private IDictionary<string, int> _falseNegatives;
+        private IDictionary<ClassesEnum, int> _truePositives;
+        private IDictionary<ClassesEnum, int> _trueNegatives;
+        private IDictionary<ClassesEnum, int> _falsePositives;
+        private IDictionary<ClassesEnum, int> _falseNegatives;
         private int _truePositive;
         private int _trueNegative;
         private int _falsePositive;
         private int _falseNegative;
 
-        private IDictionary<string, double> _precisions;
-        private IDictionary<string, double> _responses;
-        private IDictionary<string, double> _macroF1s;
+        private IDictionary<ClassesEnum, double> _precisions;
+        private IDictionary<ClassesEnum, double> _responses;
+        private IDictionary<ClassesEnum, double> _macroF1s;
         private double _precision;
         private double _response;
         private double _macroF1;
@@ -43,21 +43,21 @@ namespace TrafficSignSystem.Library
 
         private RecognitionEvaluation()
         {
-            this._classes = new Dictionary<string, bool>();
+            this._classes = new Dictionary<ClassesEnum, bool>();
 
-            this._truePositives = new Dictionary<string, int>();
-            this._trueNegatives = new Dictionary<string, int>();
-            this._falsePositives = new Dictionary<string, int>();
-            this._falseNegatives = new Dictionary<string, int>();
+            this._truePositives = new Dictionary<ClassesEnum, int>();
+            this._trueNegatives = new Dictionary<ClassesEnum, int>();
+            this._falsePositives = new Dictionary<ClassesEnum, int>();
+            this._falseNegatives = new Dictionary<ClassesEnum, int>();
 
-            this._precisions = new Dictionary<string, double>();
-            this._responses = new Dictionary<string, double>();
-            this._macroF1s = new Dictionary<string, double>();
+            this._precisions = new Dictionary<ClassesEnum, double>();
+            this._responses = new Dictionary<ClassesEnum, double>();
+            this._macroF1s = new Dictionary<ClassesEnum, double>();
         }
 
-        public void Update(string systemClass, string realClass)
+        public void Update(ClassesEnum systemClass, ClassesEnum realClass)
         {
-            totalData++;
+            _totalData++;
             this._classes[realClass] = true;
             if (systemClass == realClass)
                 this.UpdateDictionary(this._truePositives, realClass);
@@ -70,9 +70,9 @@ namespace TrafficSignSystem.Library
 
         public void Calculate()
         {
-            foreach (string key in this._classes.Keys)
+            foreach (ClassesEnum key in this._classes.Keys)
             {
-                this._trueNegatives[key] = totalData -
+                this._trueNegatives[key] = _totalData -
                     this.GetFromDictionary(this._truePositives, key) -
                     this.GetFromDictionary(this._falsePositives, key) -
                     this.GetFromDictionary(this._falseNegatives, key);
@@ -101,7 +101,7 @@ namespace TrafficSignSystem.Library
         {
             using (StreamWriter writter = new StreamWriter(file))
             {
-                foreach (string key in this._classes.Keys)
+                foreach (ClassesEnum key in this._classes.Keys)
                 {
                     writter.WriteLine(key);
                     writter.WriteLine("TP:\t{0}", this.GetFromDictionary(this._truePositives, key));
@@ -124,7 +124,7 @@ namespace TrafficSignSystem.Library
             }
         }
 
-        private void UpdateDictionary(IDictionary<string, int> dict, string key)
+        private void UpdateDictionary(IDictionary<ClassesEnum, int> dict, ClassesEnum key)
         {
             if (dict.ContainsKey(key))
                 dict[key] = dict[key]++;
@@ -132,7 +132,7 @@ namespace TrafficSignSystem.Library
                 dict[key] = 1;
         }
 
-        private int GetFromDictionary(IDictionary<string, int> dict, string key)
+        private int GetFromDictionary(IDictionary<ClassesEnum, int> dict, ClassesEnum key)
         {
             if (dict.ContainsKey(key))
                 return dict[key];
@@ -140,7 +140,7 @@ namespace TrafficSignSystem.Library
                 return 0;
         }
 
-        private double GetFromDictionary(IDictionary<string, double> dict, string key)
+        private double GetFromDictionary(IDictionary<ClassesEnum, double> dict, ClassesEnum key)
         {
             if (dict.ContainsKey(key))
                 return dict[key];

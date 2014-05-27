@@ -7,7 +7,7 @@ using CommandLine;
 
 namespace TrafficSignSystem.Train
 {
-    public class RecognitionSubOptions
+    public class RandomForestsSubOptions
     {
         [Option('m', "model_file", Required = true, HelpText = "Path to file with model.")]
         public string ModelFile { get; set; }

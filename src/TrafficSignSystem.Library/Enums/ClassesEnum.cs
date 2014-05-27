@@ -8,17 +8,17 @@ namespace TrafficSignSystem.Library
 {
     public enum ClassesEnum
     {
-        speed20 = 20,
-        speed30 = 30,
-        speed40 = 40,
-        speed50 = 50,
-        speed60 = 60,
-        speed70 = 70,
-        speed80 = 80,
-        speed90 = 90,
-        speed100 = 100,
-        speed110 = 110,
-        speed120 = 120,
-        speed130 = 130
+        //Speed20,
+        Speed30 = 0,
+        Speed40 = 1,
+        Speed50 = 2,
+        Speed60 = 3,
+        Speed70 = 4,
+        //Speed80,
+        //Speed90,
+        //Speed100,
+        //Speed110,
+        //Speed120,
+        //Speed130
     }
 }

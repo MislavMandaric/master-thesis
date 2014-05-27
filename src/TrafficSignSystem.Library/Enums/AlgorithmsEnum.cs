@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace TrafficSignSystem.Library
 {
-    public struct AlgorithmsEnum
+    public enum AlgorithmsEnum
     {
-        public const string DETECTION = "detection";
-        public const string RECOGNITION = "recognition";
-        public const string VIOLA_JONES = "ViolaJones";
-        public const string RANDOM_FOREST = "RandomForest";
+        ViolaJones = 0,
+        RandomForests = 1
     }
 }

@@ -7,19 +7,19 @@ using CommandLine;
 
 namespace TrafficSignSystem.Train
 {
-    public class DetectionSubOptions
+    public class ViolaJonesSubOptions
     {
         [Option('p', "positive_file", Required = true, HelpText = "Path to file with positive images.")]
-        public string PositiveFile { get; set; }
+        public string TrainFilePositive { get; set; }
         [Option('n', "negative_file", Required = true, HelpText = "Path to file with negative images.")]
-        public string NegativeFile { get; set; }
+        public string TrainFileNegative { get; set; }
         [Option('v', "vector_file", Required = true, HelpText = "Path to file with vector description of the positive images.")]
         public string VectorFile { get; set; }
         [Option('c', "cascade_folder", Required = true, HelpText = "Path to folder with cascade files.")]
         public string CascadeFolder { get; set; }
         [Option("total_positive", Required = true, HelpText = "Total number of positive images.")]
-        public int TotalPositive { get; set; }
+        public int TotalDataPositive { get; set; }
         [Option("total_negative", Required = true, HelpText = "Total number of negative images.")]
-        public int TotalNegative { get; set; }
+        public int TotalDataNegative { get; set; }
     }
 }

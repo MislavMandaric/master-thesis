@@ -47,11 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DetectionSubOptions.cs" />
+    <Compile Include="ViolaJonesSubOptions.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RecognitionSubOptions.cs" />
+    <Compile Include="RandomForestsSubOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

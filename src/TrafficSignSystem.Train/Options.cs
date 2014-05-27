@@ -16,15 +16,15 @@ namespace TrafficSignSystem.Train
         private const int YEAR = 2014;
         private const string USAGE_TEXT = "Usage:\ttrain.exe [verb] [params]\nHelp:\ttrain.exe help\n\ttrain.exe [verb] help";
 
-        [VerbOption("detection", HelpText = "Start detector training.")]
-        public DetectionSubOptions DetectionVerb { get; set; }
-        [VerbOption("recognition", HelpText = "Start recognition training.")]
-        public RecognitionSubOptions RecognitionVerb { get; set; }
+        [VerbOption("ViolaJones", HelpText = "Start Viola-Jones training.")]
+        public ViolaJonesSubOptions ViolaJonesVerb { get; set; }
+        [VerbOption("RandomForests", HelpText = "Start Random Forests training.")]
+        public RandomForestsSubOptions RandomForestsVerb { get; set; }
 
         public Options()
         {
-            DetectionVerb = new DetectionSubOptions();
-            RecognitionVerb = new RecognitionSubOptions();
+            ViolaJonesVerb = new ViolaJonesSubOptions();
+            RandomForestsVerb = new RandomForestsSubOptions();
         }
 
         [HelpVerbOption]

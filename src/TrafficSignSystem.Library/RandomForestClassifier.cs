@@ -9,7 +9,7 @@ using System.IO;
 
 namespace TrafficSignSystem.Library
 {
-    public class RandomForestClassifier : IRecognition
+    public class RandomForestClassifier : IRecognition, ITrainable
     {
         private const int ROWS = 24;
         private const int COLS = 24;
@@ -27,15 +27,15 @@ namespace TrafficSignSystem.Library
             this._randomForest.Load(modelFile);
         }
 
-        public string Recognize(Parameters parameters)
+        public ClassesEnum Recognize(Parameters parameters)
         {
             CvMat image;
-            if (!parameters.TryGetValueByType(ParametersEnum.IMAGE, out image))
+            if (!parameters.TryGetValueByType(ParametersEnum.Image, out image))
                 throw new TrafficSignException("Invalid parameters.");
             using (CvMat imageFeatures = new CvMat(1, ROWS * COLS, MatrixType.F32C1))
             {
                 this.SetFeaturesRow(image, imageFeatures, 0);
-                return ((int)this._randomForest.Predict(imageFeatures)).ToString();
+                return (ClassesEnum)(int)this._randomForest.Predict(imageFeatures);
             }
         }
 
@@ -44,9 +44,9 @@ namespace TrafficSignSystem.Library
             string trainFile;
             string modelFile;
             int totalData;
-            if (!(parameters.TryGetValueByType(ParametersEnum.RF_TRAIN_FILE, out trainFile) &&
-                parameters.TryGetValueByType(ParametersEnum.RF_MODEL_FILE, out modelFile) &&
-                parameters.TryGetValueByType(ParametersEnum.RF_TOTAL_SAMPLES, out totalData)))
+            if (!(parameters.TryGetValueByType(ParametersEnum.TrainFile, out trainFile) &&
+                parameters.TryGetValueByType(ParametersEnum.ModelFile, out modelFile) &&
+                parameters.TryGetValueByType(ParametersEnum.TotalData, out totalData)))
                 throw new TrafficSignException("Invalid parameters.");
             string trainDir = Directory.GetParent(trainFile).FullName;
             using (CvMat featurseData = new CvMat(totalData, ROWS * COLS, MatrixType.F32C1))

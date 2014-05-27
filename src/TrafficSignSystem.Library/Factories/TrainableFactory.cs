@@ -8,14 +8,22 @@ namespace TrafficSignSystem.Library
 {
     public static class TrainableFactory
     {
-        public static ITrainable GetTrainable(string type, string algorithm, Parameters parameters)
+        public static ITrainable GetTrainable(AlgorithmsEnum algorithm, Parameters parameters)
         {
-            switch (type)
+            switch (algorithm)
             {
-                case AlgorithmsEnum.DETECTION:
-                    return DetectionFactory.GetDetection(algorithm, parameters);
-                case AlgorithmsEnum.RECOGNITION:
-                    return RecognitionFactory.GetRecognition(algorithm, parameters);
+                case AlgorithmsEnum.ViolaJones:
+                    string haarCascadeFile;
+                    if (parameters.TryGetValueByType(ParametersEnum.CascadeFile, out haarCascadeFile))
+                        return new ViolaJonesDetector(haarCascadeFile);
+                    else
+                        return new ViolaJonesDetector();
+                case AlgorithmsEnum.RandomForests:
+                    string modelFile;
+                    if (parameters.TryGetValueByType(ParametersEnum.ModelFile, out modelFile))
+                        return new RandomForestClassifier(modelFile);
+                    else
+                        return new RandomForestClassifier();
                 default:
                     throw new TrafficSignException("Algorithm not supported.");
             }

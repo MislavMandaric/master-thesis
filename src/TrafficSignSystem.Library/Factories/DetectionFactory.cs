@@ -8,13 +8,19 @@ namespace TrafficSignSystem.Library
 {
     public static class DetectionFactory
     {
-        public static IDetection GetDetection(string algorithm, Parameters parameters)
+        public static IDetection GetDetection(AlgorithmsEnum algorithm, Parameters parameters)
         {
-            string haarCascadeFile;
-            if (parameters.TryGetValueByType(ParametersEnum.VJ_CASCADE_FILE, out haarCascadeFile))
-                return new ViolaJonesDetector(haarCascadeFile);
-            else
-                return new ViolaJonesDetector();
+            switch (algorithm)
+            {
+                case AlgorithmsEnum.ViolaJones:
+                    string haarCascadeFile;
+                    if (parameters.TryGetValueByType(ParametersEnum.CascadeFile, out haarCascadeFile))
+                        return new ViolaJonesDetector(haarCascadeFile);
+                    else
+                        return new ViolaJonesDetector();
+                default:
+                    throw new TrafficSignException("Algorithm not supported.");
+            }
         }
     }
 }

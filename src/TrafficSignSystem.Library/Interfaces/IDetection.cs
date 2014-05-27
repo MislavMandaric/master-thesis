@@ -7,7 +7,7 @@ using OpenCvSharp;
 
 namespace TrafficSignSystem.Library
 {
-    public interface IDetection : ITrainable, IDisposable
+    public interface IDetection : IDisposable
     {
         CvSeq Detect(Parameters parameters);
     }

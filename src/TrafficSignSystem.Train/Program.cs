@@ -22,13 +22,19 @@ namespace TrafficSignSystem.Train
                     invokedsubOptions = subOptions;
                 }))
             {
+                AlgorithmsEnum algorithm;
+                Enum.TryParse<AlgorithmsEnum>(invokedVerb, out algorithm);
                 Parameters parameters = new Parameters();
                 foreach (var property in invokedsubOptions.GetType().GetProperties())
-                    parameters[property.Name] = property.GetValue(invokedsubOptions, null);
+                {
+                    ParametersEnum parameter;
+                    Enum.TryParse<ParametersEnum>(property.Name, out parameter);
+                    parameters[parameter] = property.GetValue(invokedsubOptions, null);
+                }
                 TrafficSystem system = new TrafficSystem();
                 try
                 {
-                    system.Train(invokedVerb, AlgorithmsEnum.RANDOM_FOREST, parameters);
+                    system.Train(algorithm, parameters);
                     Console.WriteLine("\nFinished succesfully.");
                 }
                 catch (Exception e)

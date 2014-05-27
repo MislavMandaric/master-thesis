@@ -12,10 +12,10 @@ namespace TrafficSignSystem.Library
     {
         private const int ESC = 27;
 
-        public void Run(string detectionAlgorithm, string recognitionAlgorithm, Parameters parameters)
+        public void Run(AlgorithmsEnum detectionAlgorithm, AlgorithmsEnum recognitionAlgorithm, Parameters parameters)
         {
             string videoFile;
-            if (!parameters.TryGetValueByType(ParametersEnum.VIDEO_FILE, out videoFile))
+            if (!parameters.TryGetValueByType(ParametersEnum.VideoFile, out videoFile))
                 throw new TrafficSignException("Invalid parameters.");
             using (IDetection detection = DetectionFactory.GetDetection(detectionAlgorithm, parameters))
             using (IRecognition recognition = RecognitionFactory.GetRecognition(recognitionAlgorithm, parameters))
@@ -29,7 +29,7 @@ namespace TrafficSignSystem.Library
                     using (IplImage frame = videoCapture.RetrieveFrame())
                     using (CvMat image = Cv.GetMat(frame))
                     {
-                        parameters[ParametersEnum.IMAGE] = image;
+                        parameters[ParametersEnum.Image] = image;
                         using (CvSeq detections = detection.Detect(parameters))
                         {
                             for (int i = 0; i < detections.Total; i++)
@@ -38,8 +38,8 @@ namespace TrafficSignSystem.Library
                                 image.Rectangle(rectangle, CvScalar.ScalarAll(255));
                                 using (CvMat signImage = Cv.GetMat(frame.GetSubImage(rectangle)))
                                 {
-                                    parameters[ParametersEnum.IMAGE] = signImage;
-                                    string recognizedClass = recognition.Recognize(parameters);
+                                    parameters[ParametersEnum.Image] = signImage;
+                                    ClassesEnum recognizedClass = recognition.Recognize(parameters);
                                     Console.WriteLine(recognizedClass);
                                 }
                             }
@@ -52,24 +52,24 @@ namespace TrafficSignSystem.Library
             }
         }
 
-        public void TestDetect(string algorithm, Parameters parameters)
+        public void TestDetect(AlgorithmsEnum algorithm, Parameters parameters)
         {
-            string samplesFile;
+            string testFile;
             string resultsFile;
-            if (!(parameters.TryGetValueByType(ParametersEnum.VJ_TEST_FILE, out samplesFile) &&
-                parameters.TryGetValueByType(ParametersEnum.VJ_RESULTS_FILE, out resultsFile)))
+            if (!(parameters.TryGetValueByType(ParametersEnum.TestFile, out testFile) &&
+                parameters.TryGetValueByType(ParametersEnum.ResultsFile, out resultsFile)))
                 throw new TrafficSignException("Invalid parameters.");
-            string samplesDir = Directory.GetParent(samplesFile).FullName;
+            string testDirectory = Directory.GetParent(testFile).FullName;
             using (IDetection detection = DetectionFactory.GetDetection(algorithm, parameters))
-            using (StreamReader reader = new StreamReader(samplesFile))
+            using (StreamReader reader = new StreamReader(testFile))
             {
                 while (!reader.EndOfStream)
                 {
                     string[] line = reader.ReadLine().Split(';');
-                    string file = Path.Combine(samplesDir, line[0]);
+                    string file = Path.Combine(testDirectory, line[0]);
                     using (CvMat image = new CvMat(file))
                     {
-                        parameters[ParametersEnum.IMAGE] = image;
+                        parameters[ParametersEnum.Image] = image;
                         using (CvSeq detections = detection.Detect(parameters))
                         {
                             IList<CvRect> systemDetections = new List<CvRect>();
@@ -86,26 +86,26 @@ namespace TrafficSignSystem.Library
             DetectionEvaluation.Instance.Print(resultsFile);
         }
 
-        public void TestRecognize(string algorithm, Parameters parameters)
+        public void TestRecognize(AlgorithmsEnum algorithm, Parameters parameters)
         {
-            string samplesFile;
+            string testFile;
             string resultsFile;
-            if (!(parameters.TryGetValueByType(ParametersEnum.RF_TEST_FILE, out samplesFile) &&
-                parameters.TryGetValueByType(ParametersEnum.RF_RESULTS_FILE, out resultsFile)))
+            if (!(parameters.TryGetValueByType(ParametersEnum.TestFile, out testFile) &&
+                parameters.TryGetValueByType(ParametersEnum.ResultsFile, out resultsFile)))
                 throw new TrafficSignException("Invalid parameters.");
-            string samplesDir = Directory.GetParent(samplesFile).FullName;
+            string testDirectory = Directory.GetParent(testFile).FullName;
             using (IRecognition recognition = RecognitionFactory.GetRecognition(algorithm, parameters))
-            using (StreamReader reader = new StreamReader(samplesFile))
+            using (StreamReader reader = new StreamReader(testFile))
             {
                 while (!reader.EndOfStream)
                 {
                     string[] line = reader.ReadLine().Split(';');
-                    string file = Path.Combine(samplesDir, line[0]);
+                    string file = Path.Combine(testDirectory, line[0]);
                     using (CvMat image = new CvMat(file))
                     {
-                        parameters[ParametersEnum.IMAGE] = image;
-                        string systemClass = recognition.Recognize(parameters);
-                        string realClass = line[7];
+                        parameters[ParametersEnum.Image] = image;
+                        ClassesEnum systemClass = recognition.Recognize(parameters);
+                        ClassesEnum realClass = (ClassesEnum)int.Parse(line[7]);
                         RecognitionEvaluation.Instance.Update(systemClass, realClass);
                     }
                 }
@@ -114,9 +114,9 @@ namespace TrafficSignSystem.Library
             RecognitionEvaluation.Instance.Print(resultsFile);
         }
 
-        public void Train(string type, string algorithm, Parameters parameters)
+        public void Train(AlgorithmsEnum algorithm, Parameters parameters)
         {
-            using (ITrainable training = TrainableFactory.GetTrainable(type, algorithm, parameters))
+            using (ITrainable training = TrainableFactory.GetTrainable(algorithm, parameters))
                 if (!training.Train(parameters))
                     throw new TrafficSignException("Unknown error occured during training.");
         }

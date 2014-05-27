@@ -6,9 +6,19 @@ using System.Threading.Tasks;
 
 namespace TrafficSignSystem.Library
 {
-    public class Parameters : Dictionary<string, object>
+    /// <summary>
+    /// Parameters class. It holds all the needed parameters as Key - Value pairs.
+    /// </summary>
+    public class Parameters : Dictionary<object, object>
     {
-        public bool TryGetValueByType<T>(string key, out T value)
+        /// <summary>
+        /// Method for retriving staticly typed parameter by name.
+        /// </summary>
+        /// <typeparam name="T">Type of the parameter</typeparam>
+        /// <param name="key">Parameter key</param>
+        /// <param name="value">Out: Parameter value</param>
+        /// <returns>True if key exists, False otherwise</returns>
+        public bool TryGetValueByType<T>(ParametersEnum key, out T value)
         {
             object obj;
             if (this.TryGetValue(key, out obj))

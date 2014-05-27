@@ -13,10 +13,10 @@ namespace TrafficSignSystem.Test
         {
             TrafficSystem system = new TrafficSystem();
             Parameters parameters = new Parameters();
-            parameters[ParametersEnum.RF_MODEL_FILE] = args[1];
-            parameters[ParametersEnum.RF_TEST_FILE] = args[2];
-            parameters[ParametersEnum.RF_RESULTS_FILE] = args[3];
-            system.TestRecognize(AlgorithmsEnum.RANDOM_FOREST, parameters);
+            parameters[ParametersEnum.ModelFile] = args[1];
+            parameters[ParametersEnum.TestFile] = args[2];
+            parameters[ParametersEnum.ResultsFile] = args[3];
+            system.TestRecognize(AlgorithmsEnum.RandomForests, parameters);
         }
     }
 }

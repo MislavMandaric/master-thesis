@@ -22,7 +22,7 @@ namespace TrafficSignSystem.Library
             }
         }
 
-        private int totalData;
+        private const double HIT_TRESHOLD = 0.5;
 
         private int _truePositive;
         private int _falsePositive;
@@ -36,8 +36,22 @@ namespace TrafficSignSystem.Library
 
         public void Update(IList<CvRect> systemDetections, IList<CvRect> realDetections)
         {
-            totalData++;
-            // TODO: Definirati kada je detekcija TP, FP, FN
+            Dictionary<CvRect, bool> realDetectionsHit = realDetections.ToDictionary(x => x, y => false);
+            foreach (CvRect real in realDetections)
+            {
+                double maxCoefficient = double.MinValue;
+                foreach (CvRect system in systemDetections)
+                {
+                    double coefficient = this.CalculateSimilarity(system, real);
+                    if (coefficient > maxCoefficient)
+                        maxCoefficient = coefficient;
+                }
+                if (maxCoefficient > HIT_TRESHOLD)
+                    realDetectionsHit[real] = true;
+            }
+            this._truePositive = realDetectionsHit.Count(x => x.Value);
+            this._falseNegative = realDetectionsHit.Count(x => !x.Value);
+            this._falsePositive = systemDetections.Count - this._truePositive;
         }
 
         public void Calculate()
@@ -58,6 +72,17 @@ namespace TrafficSignSystem.Library
                 writter.WriteLine("R:\t{0}", this._response);
                 writter.WriteLine("F1:\t{0}", this._f1);
             }
+        }
+
+        private double CalculateSimilarity(CvRect system, CvRect real)
+        {
+            CvRect intersection = system.Intersect(real);
+
+            int intersectionArea = intersection.Width * intersection.Height;
+            int systemArea = system.Width * system.Height;
+            int realArea = real.Width * real.Height;
+
+            return (double)intersectionArea / (systemArea + realArea - intersectionArea);
         }
     }
 }

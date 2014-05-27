@@ -8,7 +8,7 @@ using OpenCvSharp;
 
 namespace TrafficSignSystem.Library
 {
-    public class ViolaJonesDetector : IDetection
+    public class ViolaJonesDetector : IDetection, ITrainable
     {
         private const string FEATURE_MODE = "BASIC";
         private const string FEATURE_TYPE = "HAAR";
@@ -33,7 +33,7 @@ namespace TrafficSignSystem.Library
         public CvSeq Detect(Parameters parameters)
         {
             CvMat image;
-            if (!parameters.TryGetValueByType(ParametersEnum.IMAGE, out image))
+            if (!parameters.TryGetValueByType(ParametersEnum.Image, out image))
                 throw new TrafficSignException("Invalid parameters.");
             using (CvMat preprocessedImage = Preprocess.ViolaJonesPreprocess(image))
             {
@@ -50,12 +50,12 @@ namespace TrafficSignSystem.Library
             string cascadeFolder;
             int totalPositive;
             int totalNegative;
-            if (!(parameters.TryGetValueByType(ParametersEnum.VJ_POSITIVE_FILE, out positiveFile) &&
-                parameters.TryGetValueByType(ParametersEnum.VJ_NEGATIVE_FILE, out negativeFile) &&
-                parameters.TryGetValueByType(ParametersEnum.VJ_VECTOR_FILE, out vectorFile) &&
-                parameters.TryGetValueByType(ParametersEnum.VJ_CASCADE_FOLDER, out cascadeFolder) &&
-                parameters.TryGetValueByType(ParametersEnum.VJ_TOTAL_POSITIVE, out totalPositive) &&
-                parameters.TryGetValueByType(ParametersEnum.VJ_TOTAL_NEGATIVE, out totalNegative)))
+            if (!(parameters.TryGetValueByType(ParametersEnum.TrainFilePositive, out positiveFile) &&
+                parameters.TryGetValueByType(ParametersEnum.TrainFileNegative, out negativeFile) &&
+                parameters.TryGetValueByType(ParametersEnum.VectorFile, out vectorFile) &&
+                parameters.TryGetValueByType(ParametersEnum.CascadeFolder, out cascadeFolder) &&
+                parameters.TryGetValueByType(ParametersEnum.TotalDataPositive, out totalPositive) &&
+                parameters.TryGetValueByType(ParametersEnum.TotalDataNegative, out totalNegative)))
                 throw new TrafficSignException("Invalid parameters.");
             StringBuilder builder = new StringBuilder();
             builder.Append("-vec ").Append(vectorFile)
