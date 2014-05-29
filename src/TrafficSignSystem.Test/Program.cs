@@ -13,10 +13,10 @@ namespace TrafficSignSystem.Test
         {
             TrafficSystem system = new TrafficSystem();
             Parameters parameters = new Parameters();
-            parameters[ParametersEnum.ModelFile] = args[1];
-            parameters[ParametersEnum.TestFile] = args[2];
-            parameters[ParametersEnum.ResultsFile] = args[3];
-            system.TestRecognize(AlgorithmsEnum.RandomForests, parameters);
+            parameters[ParametersEnum.CascadeFile] = @"C:\opencv\sources\data\haarcascades\haarcascade_frontalface_alt.xml";
+            parameters[ParametersEnum.TestFile] = @"C:\Users\Mislav\Documents\diplomski\test\positive.txt";
+            parameters[ParametersEnum.ResultsFile] = @"C:\Users\Mislav\Desktop\results.txt";
+            system.TestDetect(AlgorithmsEnum.ViolaJones, parameters);
         }
     }
 }

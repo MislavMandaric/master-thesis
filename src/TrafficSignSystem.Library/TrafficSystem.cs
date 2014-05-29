@@ -65,7 +65,7 @@ namespace TrafficSignSystem.Library
             {
                 while (!reader.EndOfStream)
                 {
-                    string[] line = reader.ReadLine().Split(';');
+                    string[] line = reader.ReadLine().Split(' ');
                     string file = Path.Combine(testDirectory, line[0]);
                     using (CvMat image = new CvMat(file))
                     {
@@ -75,8 +75,16 @@ namespace TrafficSignSystem.Library
                             IList<CvRect> systemDetections = new List<CvRect>();
                             for (int i = 0; i < detections.Total; i++)
                                 systemDetections.Add((CvRect)detections.GetSeqElem<CvRect>(i));
-                            // TODO: Dohvatiti listu stvarnih rectangleova iz filea
                             IList<CvRect> realDetections = new List<CvRect>();
+                            int numOfSigns = int.Parse(line[1]);
+                            for (int i = 0; i < numOfSigns; i++)
+                            {
+                                int x = int.Parse(line[i * 4 + 2]);
+                                int y = int.Parse(line[i * 4 + 3]);
+                                int w = int.Parse(line[i * 4 + 4]);
+                                int h = int.Parse(line[i * 4 + 5]);
+                                realDetections.Add(new CvRect(x, y, w, h));
+                            }
                             DetectionEvaluation.Instance.Update(systemDetections, realDetections);
                         }
                     }
@@ -99,13 +107,13 @@ namespace TrafficSignSystem.Library
             {
                 while (!reader.EndOfStream)
                 {
-                    string[] line = reader.ReadLine().Split(';');
+                    string[] line = reader.ReadLine().Split(' ');
                     string file = Path.Combine(testDirectory, line[0]);
                     using (CvMat image = new CvMat(file))
                     {
                         parameters[ParametersEnum.Image] = image;
                         ClassesEnum systemClass = recognition.Recognize(parameters);
-                        ClassesEnum realClass = (ClassesEnum)int.Parse(line[7]);
+                        ClassesEnum realClass = (ClassesEnum)int.Parse(line[1]);
                         RecognitionEvaluation.Instance.Update(systemClass, realClass);
                     }
                 }

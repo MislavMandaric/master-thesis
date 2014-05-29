@@ -57,11 +57,11 @@ namespace TrafficSignSystem.Library
                     int row = 0;
                     while (!reader.EndOfStream)
                     {
-                        string[] line = reader.ReadLine().Split(';');
+                        string[] line = reader.ReadLine().Split(' ');
                         string file = Path.Combine(trainDir, line[0]);
                         using (CvMat image = new CvMat(file))
                             this.SetFeaturesRow(image, featurseData, row);
-                        double response = double.Parse(line[7]);
+                        double response = double.Parse(line[1]);
                         responsesData.mSet(row, 0, response);
                         row++;
                     }

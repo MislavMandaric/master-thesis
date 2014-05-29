@@ -16,8 +16,8 @@ namespace TrafficSignSystem.Library
         private const int BUFFER_SIZE = 1024;
         private const int WIDTH = 24;
         private const int HEIGHT = 24;
-        private const int STAGES = 10;
-        private const float MIN_HIT_RATE = 0.995f;
+        private const int STAGES = 20;
+        private const float MIN_HIT_RATE = 0.998f;
         private const float MAX_FALSE_RATE = 0.4f;
         private const float SCALE_FACTOR = 1.1f;
 

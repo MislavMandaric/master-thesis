@@ -82,6 +82,8 @@ namespace TrafficSignSystem.Library
             int systemArea = system.Width * system.Height;
             int realArea = real.Width * real.Height;
 
+            if (systemArea + realArea == intersectionArea)
+                return 0;
             return (double)intersectionArea / (systemArea + realArea - intersectionArea);
         }
     }

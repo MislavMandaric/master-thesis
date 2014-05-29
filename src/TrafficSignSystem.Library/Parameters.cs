@@ -9,7 +9,7 @@ namespace TrafficSignSystem.Library
     /// <summary>
     /// Parameters class. It holds all the needed parameters as Key - Value pairs.
     /// </summary>
-    public class Parameters : Dictionary<object, object>
+    public class Parameters : Dictionary<ParametersEnum, object>
     {
         /// <summary>
         /// Method for retriving staticly typed parameter by name.
