@@ -8,6 +8,6 @@ namespace TrafficSignSystem.Library
 {
     public interface ITrainable : IDisposable
     {
-        bool Train(Parameters parameters);
+        void Train(Parameters parameters);
     }
 }

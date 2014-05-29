@@ -39,7 +39,7 @@ namespace TrafficSignSystem.Library
             }
         }
 
-        public bool Train(Parameters parameters)
+        public void Train(Parameters parameters)
         {
             string trainFile;
             string modelFile;
@@ -60,19 +60,18 @@ namespace TrafficSignSystem.Library
                         string[] line = reader.ReadLine().Split(' ');
                         string file = Path.Combine(trainDir, line[0]);
                         using (IplImage image = new IplImage(file))
+                        {
                             this.SetFeaturesRow(image, featurseData, row);
+                        }
                         double response = double.Parse(line[1]);
                         responsesData.mSet(row, 0, response);
                         row++;
                     }
                 }
                 if (this._randomForest.Train(featurseData, DTreeDataLayout.RowSample, responsesData))
-                {
                     this._randomForest.Save(modelFile);
-                    return true;
-                }
                 else
-                    return false;
+                    throw new TrafficSignException("Training failed.");
             }
         }
 
@@ -112,9 +111,11 @@ namespace TrafficSignSystem.Library
         private void SetFeaturesRow(IplImage image, CvMat features, int row)
         {
             using (IplImage preprocessedImage = Preprocess.RandomForestPreprocess(image, WIDTH, HEIGHT))
+            {
                 for (int i = 0; i < preprocessedImage.Height; i++)
                     for (int j = 0; j < preprocessedImage.Width; j++)
                         features.mSet(row, i * preprocessedImage.Width + j, preprocessedImage[i, j]);
+            }
         }
     }
 }

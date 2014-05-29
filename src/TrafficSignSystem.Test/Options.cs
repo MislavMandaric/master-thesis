@@ -14,7 +14,7 @@ namespace TrafficSignSystem.Test
         private const string VERSION = "1.0";
         private const string AUTOHOR_NAME = "Mislav Mandarić";
         private const int YEAR = 2014;
-        private const string USAGE_TEXT = "Usage:\ttest.exe [verb] [params]\nHelp:\ttrain.exe help\n\ttrain.exe [verb] help";
+        private const string USAGE_TEXT = "Usage:\ttest.exe [verb] [params]\nHelp:\ttest.exe help\n\ttest.exe [verb] help";
 
         [VerbOption("ViolaJones", HelpText = "Start Viola-Jones testing.")]
         public ViolaJonesSubOptions ViolaJonesVerb { get; set; }

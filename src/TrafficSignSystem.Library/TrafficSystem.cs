@@ -34,7 +34,7 @@ namespace TrafficSignSystem.Library
                             for (int i = 0; i < detections.Total; i++)
                             {
                                 CvRect rectangle = (CvRect)detections.GetSeqElem<CvRect>(i);
-                                image.Rectangle(rectangle, CvScalar.ScalarAll(255));
+                                image.Rectangle(rectangle, new CvScalar(255, 0, 0));
                                 using (IplImage signImage = image.GetSubImage(rectangle))
                                 {
                                     parameters[ParametersEnum.Image] = signImage;
@@ -54,14 +54,17 @@ namespace TrafficSignSystem.Library
         public void Test(AlgorithmsEnum algorithm, Parameters parameters)
         {
             using (ITestable testing = TestableFactory.GetTestable(algorithm, parameters))
+            {
                 testing.Test(parameters);
+            }
         }
 
         public void Train(AlgorithmsEnum algorithm, Parameters parameters)
         {
             using (ITrainable training = TrainableFactory.GetTrainable(algorithm, parameters))
-                if (!training.Train(parameters))
-                    throw new TrafficSignException("Unknown error occured during training.");
+            {
+                training.Train(parameters);
+            }
         }
     }
 }

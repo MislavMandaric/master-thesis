@@ -100,30 +100,30 @@ namespace TrafficSignSystem.Library
                 foreach (ClassesEnum key in Enum.GetValues(typeof(ClassesEnum)))
                 {
                     writter.WriteLine(key);
-                    writter.WriteLine("TP:\t{0}", this.GetFromDictionary(this._truePositives, key));
-                    writter.WriteLine("TN:\t{0}", this.GetFromDictionary(this._trueNegatives, key));
-                    writter.WriteLine("FP:\t{0}", this.GetFromDictionary(this._falsePositives, key));
-                    writter.WriteLine("FN:\t{0}", this.GetFromDictionary(this._falseNegatives, key));
-                    writter.WriteLine("P:\t{0}", this.GetFromDictionary(this._precisions, key));
-                    writter.WriteLine("R:\t{0}", this.GetFromDictionary(this._responses, key));
-                    writter.WriteLine("MF1:\t{0}", this.GetFromDictionary(this._macroF1s, key));
+                    writter.WriteLine("TP:\t\t{0}", this.GetFromDictionary(this._truePositives, key));
+                    writter.WriteLine("TN:\t\t{0}", this.GetFromDictionary(this._trueNegatives, key));
+                    writter.WriteLine("FP:\t\t{0}", this.GetFromDictionary(this._falsePositives, key));
+                    writter.WriteLine("FN:\t\t{0}", this.GetFromDictionary(this._falseNegatives, key));
+                    writter.WriteLine("P:\t\t{0}", this.GetFromDictionary(this._precisions, key));
+                    writter.WriteLine("R:\t\t{0}", this.GetFromDictionary(this._responses, key));
+                    writter.WriteLine("MF1:\t\t{0}", this.GetFromDictionary(this._macroF1s, key));
                     writter.WriteLine();
                 }
-                writter.WriteLine("TP:\t{0}", this._truePositive);
-                writter.WriteLine("TN:\t{0}", this._trueNegative);
-                writter.WriteLine("FP:\t{0}", this._falsePositive);
-                writter.WriteLine("FN:\t{0}", this._falseNegative);
-                writter.WriteLine("P:\t{0}", this._precision);
-                writter.WriteLine("R:\t{0}", this._response);
-                writter.WriteLine("MF1:\t{0}", this._macroF1);
-                writter.WriteLine("mF1:\t{0}", this._microF1);
+                writter.WriteLine("TP:\t\t{0}", this._truePositive);
+                writter.WriteLine("TN:\t\t{0}", this._trueNegative);
+                writter.WriteLine("FP:\t\t{0}", this._falsePositive);
+                writter.WriteLine("FN:\t\t{0}", this._falseNegative);
+                writter.WriteLine("P:\t\t{0}", this._precision);
+                writter.WriteLine("R:\t\t{0}", this._response);
+                writter.WriteLine("MF1:\t\t{0}", this._macroF1);
+                writter.WriteLine("mF1:\t\t{0}", this._microF1);
             }
         }
 
         private void UpdateDictionary(IDictionary<ClassesEnum, int> dict, ClassesEnum key)
         {
             if (dict.ContainsKey(key))
-                dict[key] = dict[key]++;
+                dict[key] = dict[key] + 1;
             else
                 dict[key] = 1;
         }

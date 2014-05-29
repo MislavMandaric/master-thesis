@@ -65,26 +65,32 @@ namespace TrafficSignSystem.Library
         {
             using (StreamWriter writter = new StreamWriter(file))
             {
-                writter.WriteLine("TP:\t{0}", this._truePositive);
-                writter.WriteLine("FP:\t{0}", this._falsePositive);
-                writter.WriteLine("FN:\t{0}", this._falseNegative);
-                writter.WriteLine("P:\t{0}", this._precision);
-                writter.WriteLine("R:\t{0}", this._response);
-                writter.WriteLine("F1:\t{0}", this._f1);
+                writter.WriteLine("TP:\t\t{0}", this._truePositive);
+                writter.WriteLine("FP:\t\t{0}", this._falsePositive);
+                writter.WriteLine("FN:\t\t{0}", this._falseNegative);
+                writter.WriteLine("P:\t\t{0}", this._precision);
+                writter.WriteLine("R:\t\t{0}", this._response);
+                writter.WriteLine("F1:\t\t{0}", this._f1);
             }
         }
 
         private double CalculateSimilarity(CvRect system, CvRect real)
         {
-            int l = system.Left > real.Left ? system.Left : real.Left;
-            int r = system.Right < real.Right ? system.Right : real.Right;
-            int t = system.Top > real.Top ? system.Top : real.Top;
-            int b = system.Bottom < real.Bottom ? system.Bottom : real.Bottom;
+            //int l = system.Left > real.Left ? system.Left : real.Left;
+            //int r = system.Right < real.Right ? system.Right : real.Right;
+            //int t = system.Top > real.Top ? system.Top : real.Top;
+            //int b = system.Bottom < real.Bottom ? system.Bottom : real.Bottom;
 
-            if (l > r || t > b)
+            //if (l > r || t > b)
+            //    return 0;
+
+            //int intersectionArea = (r - l) * (b - t);
+            if (!system.IntersectsWith(real))
                 return 0;
 
-            int intersectionArea = (r - l) * (b - t);
+            CvRect intersection = system.Intersect(real);
+
+            int intersectionArea = intersection.Width * intersection.Height;
             int systemArea = system.Width * system.Height;
             int realArea = real.Width * real.Height;
 

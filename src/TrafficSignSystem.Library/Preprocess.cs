@@ -22,7 +22,7 @@ namespace TrafficSignSystem.Library
             using (IplImage smallImage = new IplImage(new CvSize(width, height), image.Depth, image.ElemChannels))
             {
                 image.Resize(smallImage);
-                IplImage preprocessedImage = new IplImage(image.Size, image.Depth, 1);
+                IplImage preprocessedImage = new IplImage(smallImage.Size, smallImage.Depth, 1);
                 smallImage.CvtColor(preprocessedImage, ColorConversion.BgrToGray);
                 preprocessedImage.EqualizeHist(preprocessedImage);
                 return preprocessedImage;

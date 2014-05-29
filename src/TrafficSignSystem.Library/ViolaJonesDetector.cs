@@ -43,7 +43,7 @@ namespace TrafficSignSystem.Library
             }
         }
 
-        public bool Train(Parameters parameters)
+        public void Train(Parameters parameters)
         {
             string positiveFile;
             string negativeFile;
@@ -68,7 +68,7 @@ namespace TrafficSignSystem.Library
             {
                 process.WaitForExit();
                 if (process.ExitCode != 0)
-                    return false;
+                    throw new TrafficSignException("Generating vector file failed.");
             }
             builder.Clear();
             builder.Append("-data ").Append(cascadeFolder)
@@ -91,9 +91,8 @@ namespace TrafficSignSystem.Library
             {
                 process.WaitForExit();
                 if (process.ExitCode != 0)
-                    return false;
+                    throw new TrafficSignException("Training failed.");
             }
-            return true;
         }
 
         public void Test(Parameters parameters)
