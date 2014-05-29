@@ -22,7 +22,6 @@ namespace TrafficSignSystem.Library
         }
 
         private int _totalData;
-        private IDictionary<ClassesEnum, bool> _classes;
 
         private IDictionary<ClassesEnum, int> _truePositives;
         private IDictionary<ClassesEnum, int> _trueNegatives;
@@ -43,8 +42,6 @@ namespace TrafficSignSystem.Library
 
         private RecognitionEvaluation()
         {
-            this._classes = new Dictionary<ClassesEnum, bool>();
-
             this._truePositives = new Dictionary<ClassesEnum, int>();
             this._trueNegatives = new Dictionary<ClassesEnum, int>();
             this._falsePositives = new Dictionary<ClassesEnum, int>();
@@ -58,7 +55,6 @@ namespace TrafficSignSystem.Library
         public void Update(ClassesEnum systemClass, ClassesEnum realClass)
         {
             _totalData++;
-            this._classes[realClass] = true;
             if (systemClass == realClass)
                 this.UpdateDictionary(this._truePositives, realClass);
             else
@@ -70,7 +66,7 @@ namespace TrafficSignSystem.Library
 
         public void Calculate()
         {
-            foreach (ClassesEnum key in this._classes.Keys)
+            foreach (ClassesEnum key in Enum.GetValues(typeof(ClassesEnum)))
             {
                 this._trueNegatives[key] = _totalData -
                     this.GetFromDictionary(this._truePositives, key) -
@@ -101,7 +97,7 @@ namespace TrafficSignSystem.Library
         {
             using (StreamWriter writter = new StreamWriter(file))
             {
-                foreach (ClassesEnum key in this._classes.Keys)
+                foreach (ClassesEnum key in Enum.GetValues(typeof(ClassesEnum)))
                 {
                     writter.WriteLine(key);
                     writter.WriteLine("TP:\t{0}", this.GetFromDictionary(this._truePositives, key));
@@ -110,7 +106,7 @@ namespace TrafficSignSystem.Library
                     writter.WriteLine("FN:\t{0}", this.GetFromDictionary(this._falseNegatives, key));
                     writter.WriteLine("P:\t{0}", this.GetFromDictionary(this._precisions, key));
                     writter.WriteLine("R:\t{0}", this.GetFromDictionary(this._responses, key));
-                    writter.WriteLine("F1 macro:\t{0}", this.GetFromDictionary(this._macroF1s, key));
+                    writter.WriteLine("MF1:\t{0}", this.GetFromDictionary(this._macroF1s, key));
                     writter.WriteLine();
                 }
                 writter.WriteLine("TP:\t{0}", this._truePositive);
@@ -119,8 +115,8 @@ namespace TrafficSignSystem.Library
                 writter.WriteLine("FN:\t{0}", this._falseNegative);
                 writter.WriteLine("P:\t{0}", this._precision);
                 writter.WriteLine("R:\t{0}", this._response);
-                writter.WriteLine("F1 macro:\t{0}", this._macroF1);
-                writter.WriteLine("F1 micro:\t{0}", this._microF1);
+                writter.WriteLine("MF1:\t{0}", this._macroF1);
+                writter.WriteLine("mF1:\t{0}", this._microF1);
             }
         }
 

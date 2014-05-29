@@ -9,22 +9,20 @@ namespace TrafficSignSystem.Library
 {
     public static class Preprocess
     {
-        public static CvMat ViolaJonesPreprocess(CvMat image)
+        public static IplImage ViolaJonesPreprocess(IplImage image)
         {
-            CvMat preprocessedImage = new CvMat(image.Rows, image.Cols, image.ElemType);
-            preprocessedImage.Reshape(preprocessedImage, 1);
+            IplImage preprocessedImage = new IplImage(image.Size, image.Depth, 1);
             image.CvtColor(preprocessedImage, ColorConversion.BgrToGray);
             preprocessedImage.EqualizeHist(preprocessedImage);
             return preprocessedImage;
         }
 
-        public static CvMat RandomForestPreprocess(CvMat image, int rows, int cols)
+        public static IplImage RandomForestPreprocess(IplImage image, int width, int height)
         {
-            using (CvMat smallImage = new CvMat(rows, cols, image.ElemType))
+            using (IplImage smallImage = new IplImage(new CvSize(width, height), image.Depth, image.ElemChannels))
             {
                 image.Resize(smallImage);
-                CvMat preprocessedImage = new CvMat(smallImage.Rows, smallImage.Cols, smallImage.ElemType);
-                preprocessedImage.Reshape(preprocessedImage, 1);
+                IplImage preprocessedImage = new IplImage(image.Size, image.Depth, 1);
                 smallImage.CvtColor(preprocessedImage, ColorConversion.BgrToGray);
                 preprocessedImage.EqualizeHist(preprocessedImage);
                 return preprocessedImage;

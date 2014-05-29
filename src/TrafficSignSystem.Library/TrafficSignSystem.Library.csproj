@@ -68,8 +68,10 @@
     <Compile Include="DetectionEvaluation.cs" />
     <Compile Include="Enums\ClassesEnum.cs" />
     <Compile Include="Factories\DetectionFactory.cs" />
+    <Compile Include="Factories\TestableFactory.cs" />
     <Compile Include="Interfaces\IDetection.cs" />
     <Compile Include="Interfaces\IRecognition.cs" />
+    <Compile Include="Interfaces\ITestable.cs" />
     <Compile Include="Interfaces\ITrainable.cs" />
     <Compile Include="Parameters.cs" />
     <Compile Include="Enums\ParametersEnum.cs" />

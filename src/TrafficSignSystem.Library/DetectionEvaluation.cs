@@ -49,9 +49,9 @@ namespace TrafficSignSystem.Library
                 if (maxCoefficient > HIT_TRESHOLD)
                     realDetectionsHit[real] = true;
             }
-            this._truePositive = realDetectionsHit.Count(x => x.Value);
-            this._falseNegative = realDetectionsHit.Count(x => !x.Value);
-            this._falsePositive = systemDetections.Count - this._truePositive;
+            this._truePositive += realDetectionsHit.Count(x => x.Value);
+            this._falseNegative += realDetectionsHit.Count(x => !x.Value);
+            this._falsePositive += systemDetections.Count - realDetectionsHit.Count(x => x.Value);
         }
 
         public void Calculate()
@@ -76,9 +76,15 @@ namespace TrafficSignSystem.Library
 
         private double CalculateSimilarity(CvRect system, CvRect real)
         {
-            CvRect intersection = system.Intersect(real);
+            int l = system.Left > real.Left ? system.Left : real.Left;
+            int r = system.Right < real.Right ? system.Right : real.Right;
+            int t = system.Top > real.Top ? system.Top : real.Top;
+            int b = system.Bottom < real.Bottom ? system.Bottom : real.Bottom;
 
-            int intersectionArea = intersection.Width * intersection.Height;
+            if (l > r || t > b)
+                return 0;
+
+            int intersectionArea = (r - l) * (b - t);
             int systemArea = system.Width * system.Height;
             int realArea = real.Width * real.Height;
 

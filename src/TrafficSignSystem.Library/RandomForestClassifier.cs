@@ -9,10 +9,10 @@ using System.IO;
 
 namespace TrafficSignSystem.Library
 {
-    public class RandomForestClassifier : IRecognition, ITrainable
+    public class RandomForestClassifier : IRecognition, ITrainable, ITestable
     {
-        private const int ROWS = 24;
-        private const int COLS = 24;
+        private const int WIDTH = 24;
+        private const int HEIGHT = 24;
 
         private CvRTrees _randomForest;
 
@@ -29,10 +29,10 @@ namespace TrafficSignSystem.Library
 
         public ClassesEnum Recognize(Parameters parameters)
         {
-            CvMat image;
+            IplImage image;
             if (!parameters.TryGetValueByType(ParametersEnum.Image, out image))
                 throw new TrafficSignException("Invalid parameters.");
-            using (CvMat imageFeatures = new CvMat(1, ROWS * COLS, MatrixType.F32C1))
+            using (CvMat imageFeatures = new CvMat(1, WIDTH * HEIGHT, MatrixType.F32C1))
             {
                 this.SetFeaturesRow(image, imageFeatures, 0);
                 return (ClassesEnum)(int)this._randomForest.Predict(imageFeatures);
@@ -49,7 +49,7 @@ namespace TrafficSignSystem.Library
                 parameters.TryGetValueByType(ParametersEnum.TotalData, out totalData)))
                 throw new TrafficSignException("Invalid parameters.");
             string trainDir = Directory.GetParent(trainFile).FullName;
-            using (CvMat featurseData = new CvMat(totalData, ROWS * COLS, MatrixType.F32C1))
+            using (CvMat featurseData = new CvMat(totalData, WIDTH * HEIGHT, MatrixType.F32C1))
             using (CvMat responsesData = new CvMat(totalData, 1, MatrixType.F32C1))
             {
                 using (StreamReader reader = new StreamReader(trainFile))
@@ -59,7 +59,7 @@ namespace TrafficSignSystem.Library
                     {
                         string[] line = reader.ReadLine().Split(' ');
                         string file = Path.Combine(trainDir, line[0]);
-                        using (CvMat image = new CvMat(file))
+                        using (IplImage image = new IplImage(file))
                             this.SetFeaturesRow(image, featurseData, row);
                         double response = double.Parse(line[1]);
                         responsesData.mSet(row, 0, response);
@@ -76,18 +76,45 @@ namespace TrafficSignSystem.Library
             }
         }
 
+        public void Test(Parameters parameters)
+        {
+            string testFile;
+            string resultsFile;
+            if (!(parameters.TryGetValueByType(ParametersEnum.TestFile, out testFile) &&
+                parameters.TryGetValueByType(ParametersEnum.ResultsFile, out resultsFile)))
+                throw new TrafficSignException("Invalid parameters.");
+            string testDirectory = Directory.GetParent(testFile).FullName;
+            using (StreamReader reader = new StreamReader(testFile))
+            {
+                while (!reader.EndOfStream)
+                {
+                    string[] line = reader.ReadLine().Split(' ');
+                    string file = Path.Combine(testDirectory, line[0]);
+                    using (IplImage image = new IplImage(file))
+                    {
+                        parameters[ParametersEnum.Image] = image;
+                        ClassesEnum systemClass = this.Recognize(parameters);
+                        ClassesEnum realClass = (ClassesEnum)int.Parse(line[1]);
+                        RecognitionEvaluation.Instance.Update(systemClass, realClass);
+                    }
+                }
+            }
+            RecognitionEvaluation.Instance.Calculate();
+            RecognitionEvaluation.Instance.Print(resultsFile);
+        }
+
         public void Dispose()
         {
             if (this._randomForest != null)
                 this._randomForest.Dispose();
         }
 
-        private void SetFeaturesRow(CvMat image, CvMat features, int row)
+        private void SetFeaturesRow(IplImage image, CvMat features, int row)
         {
-            using (CvMat preprocessedImage = Preprocess.RandomForestPreprocess(image, ROWS, COLS))
-                for (int i = 0; i < preprocessedImage.Rows; i++)
-                    for (int j = 0; j < preprocessedImage.Cols; j++)
-                        features.mSet(row, i * preprocessedImage.Cols + j, preprocessedImage.mGet(i, j));
+            using (IplImage preprocessedImage = Preprocess.RandomForestPreprocess(image, WIDTH, HEIGHT))
+                for (int i = 0; i < preprocessedImage.Height; i++)
+                    for (int j = 0; j < preprocessedImage.Width; j++)
+                        features.mSet(row, i * preprocessedImage.Width + j, preprocessedImage[i, j]);
         }
     }
 }

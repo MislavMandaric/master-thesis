@@ -4,11 +4,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 using OpenCvSharp;
 
 namespace TrafficSignSystem.Library
 {
-    public class ViolaJonesDetector : IDetection, ITrainable
+    public class ViolaJonesDetector : IDetection, ITrainable, ITestable
     {
         private const string FEATURE_MODE = "BASIC";
         private const string FEATURE_TYPE = "HAAR";
@@ -32,10 +33,10 @@ namespace TrafficSignSystem.Library
 
         public CvSeq Detect(Parameters parameters)
         {
-            CvMat image;
+            IplImage image;
             if (!parameters.TryGetValueByType(ParametersEnum.Image, out image))
                 throw new TrafficSignException("Invalid parameters.");
-            using (CvMat preprocessedImage = Preprocess.ViolaJonesPreprocess(image))
+            using (IplImage preprocessedImage = Preprocess.ViolaJonesPreprocess(image))
             {
                 CvMemStorage storage = new CvMemStorage();
                 return this._haarCascadeClassifier.HaarDetectObjects(preprocessedImage, storage, SCALE_FACTOR);
@@ -93,6 +94,47 @@ namespace TrafficSignSystem.Library
                     return false;
             }
             return true;
+        }
+
+        public void Test(Parameters parameters)
+        {
+            string testFile;
+            string resultsFile;
+            if (!(parameters.TryGetValueByType(ParametersEnum.TestFile, out testFile) &&
+                parameters.TryGetValueByType(ParametersEnum.ResultsFile, out resultsFile)))
+                throw new TrafficSignException("Invalid parameters.");
+            string testDirectory = Directory.GetParent(testFile).FullName;
+            using (StreamReader reader = new StreamReader(testFile))
+            {
+                while (!reader.EndOfStream)
+                {
+                    string[] line = reader.ReadLine().Split(' ');
+                    string file = Path.Combine(testDirectory, line[0]);
+                    using (IplImage image = new IplImage(file))
+                    {
+                        parameters[ParametersEnum.Image] = image;
+                        using (CvSeq detections = this.Detect(parameters))
+                        {
+                            IList<CvRect> systemDetections = new List<CvRect>();
+                            for (int i = 0; i < detections.Total; i++)
+                                systemDetections.Add((CvRect)detections.GetSeqElem<CvRect>(i));
+                            IList<CvRect> realDetections = new List<CvRect>();
+                            int numOfSigns = int.Parse(line[1]);
+                            for (int i = 0; i < numOfSigns; i++)
+                            {
+                                int x = int.Parse(line[i * 4 + 2]);
+                                int y = int.Parse(line[i * 4 + 3]);
+                                int w = int.Parse(line[i * 4 + 4]);
+                                int h = int.Parse(line[i * 4 + 5]);
+                                realDetections.Add(new CvRect(x, y, w, h));
+                            }
+                            DetectionEvaluation.Instance.Update(systemDetections, realDetections);
+                        }
+                    }
+                }
+            }
+            DetectionEvaluation.Instance.Calculate();
+            DetectionEvaluation.Instance.Print(resultsFile);
         }
 
         public void Dispose()
