@@ -30,9 +30,9 @@ namespace TrafficSignSystem.Test
                     Enum.TryParse<ParametersEnum>(property.Name, out parameter);
                     parameters[parameter] = property.GetValue(invokedsubOptions, null);
                 }
-                TrafficSystem system = new TrafficSystem();
                 try
                 {
+                    TrafficSystem system = new TrafficSystem();
                     system.Test(algorithm, parameters);
                     Console.WriteLine("\nFinished succesfully.");
                 }
