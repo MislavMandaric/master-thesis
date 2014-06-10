@@ -9,22 +9,24 @@ using System.IO;
 
 namespace TrafficSignSystem.Library
 {
-    public class RandomForestClassifier : IRecognition, ITrainable, ITestable
+    internal class RandomForestsClassifier : IRecognition, ITrainable, ITestable
     {
         private const int WIDTH = 24;
         private const int HEIGHT = 24;
 
-        private CvRTrees _randomForest;
+        private CvRTrees _randomForests;
+        private CvRTParams _rfParams;
 
-        public RandomForestClassifier()
+        public RandomForestsClassifier()
         {
-            this._randomForest = new CvRTrees();
+            this._randomForests = new CvRTrees();
+            this._rfParams = new CvRTParams(15, 8, 0, false, 10, null, false, 0, new CvTermCriteria(CriteriaType.Iteration|CriteriaType.Epsilon, 200, 0.01));
         }
 
-        public RandomForestClassifier(string modelFile)
+        public RandomForestsClassifier(string modelFile)
             : this()
         {
-            this._randomForest.Load(modelFile);
+            this._randomForests.Load(modelFile);
         }
 
         public ClassesEnum Recognize(Parameters parameters)
@@ -35,7 +37,7 @@ namespace TrafficSignSystem.Library
             using (CvMat imageFeatures = new CvMat(1, WIDTH * HEIGHT, MatrixType.F32C1))
             {
                 this.SetFeaturesRow(image, imageFeatures, 0);
-                return (ClassesEnum)(int)this._randomForest.Predict(imageFeatures);
+                return (ClassesEnum)(int)this._randomForests.Predict(imageFeatures);
             }
         }
 
@@ -68,8 +70,8 @@ namespace TrafficSignSystem.Library
                         row++;
                     }
                 }
-                if (this._randomForest.Train(featurseData, DTreeDataLayout.RowSample, responsesData))
-                    this._randomForest.Save(modelFile);
+                if (this._randomForests.Train(featurseData, DTreeDataLayout.RowSample, responsesData, null, null, null, null, this._rfParams))
+                    this._randomForests.Save(modelFile);
                 else
                     throw new TrafficSignException("Training failed.");
             }
@@ -104,13 +106,13 @@ namespace TrafficSignSystem.Library
 
         public void Dispose()
         {
-            if (this._randomForest != null)
-                this._randomForest.Dispose();
+            if (this._randomForests != null)
+                this._randomForests.Dispose();
         }
 
         private void SetFeaturesRow(IplImage image, CvMat features, int row)
         {
-            using (IplImage preprocessedImage = Preprocess.RandomForestPreprocess(image, WIDTH, HEIGHT))
+            using (IplImage preprocessedImage = Preprocess.RandomForestsPreprocess(image, WIDTH, HEIGHT))
             {
                 for (int i = 0; i < preprocessedImage.Height; i++)
                     for (int j = 0; j < preprocessedImage.Width; j++)

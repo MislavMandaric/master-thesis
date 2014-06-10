@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TrafficSignSystem.Library
 {
-    public interface IRecognition : IDisposable
+    internal interface IRecognition : IDisposable
     {
         ClassesEnum Recognize(Parameters parameters);
     }

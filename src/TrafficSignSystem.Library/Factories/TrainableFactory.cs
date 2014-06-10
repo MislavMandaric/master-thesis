@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TrafficSignSystem.Library
 {
-    public static class TrainableFactory
+    internal static class TrainableFactory
     {
         public static ITrainable GetTrainable(AlgorithmsEnum algorithm, Parameters parameters)
         {
@@ -21,9 +21,9 @@ namespace TrafficSignSystem.Library
                 case AlgorithmsEnum.RandomForests:
                     string modelFile;
                     if (parameters.TryGetValueByType(ParametersEnum.ModelFile, out modelFile))
-                        return new RandomForestClassifier(modelFile);
+                        return new RandomForestsClassifier(modelFile);
                     else
-                        return new RandomForestClassifier();
+                        return new RandomForestsClassifier();
                 default:
                     throw new TrafficSignException("Algorithm not supported.");
             }

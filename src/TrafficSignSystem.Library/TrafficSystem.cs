@@ -39,6 +39,7 @@ namespace TrafficSignSystem.Library
                                 {
                                     parameters[ParametersEnum.Image] = signImage;
                                     ClassesEnum recognizedClass = recognition.Recognize(parameters);
+                                    image.PutText(recognizedClass.ToString(), rectangle.TopLeft, new CvFont(FontFace.HersheyComplexSmall, 1, 1), new CvScalar(0, 0, 0));
                                     Console.WriteLine(recognizedClass);
                                 }
                             }
@@ -72,14 +73,28 @@ namespace TrafficSignSystem.Library
                         parameters[ParametersEnum.Image] = image;
                         using (CvSeq detections = detection.Detect(parameters))
                         {
+                            IList<CvRect> systemDetections = new List<CvRect>();
                             for (int i = 0; i < detections.Total; i++)
+                                systemDetections.Add((CvRect)detections.GetSeqElem<CvRect>(i));
+                            IList<CvRect> realDetections = new List<CvRect>();
+                            int numOfSigns = int.Parse(line[1]);
+                            for (int i = 0; i < numOfSigns; i++)
                             {
-                                CvRect rectangle = (CvRect)detections.GetSeqElem<CvRect>(i);
+                                int x = int.Parse(line[i * 4 + 2]);
+                                int y = int.Parse(line[i * 4 + 3]);
+                                int w = int.Parse(line[i * 4 + 4]);
+                                int h = int.Parse(line[i * 4 + 5]);
+                                realDetections.Add(new CvRect(x, y, w, h));
+                            }
+                            IList<CvRect> truePositives;
+                            DetectionEvaluation.Instance.Update(systemDetections, realDetections, out truePositives);
+                            foreach(CvRect rectangle in truePositives)
+                            {
                                 using (IplImage signImage = image.GetSubImage(rectangle))
                                 {
                                     parameters[ParametersEnum.Image] = signImage;
                                     ClassesEnum systemClass = recognition.Recognize(parameters);
-                                    ClassesEnum realClass = (ClassesEnum)int.Parse(line[1]);
+                                    ClassesEnum realClass = (ClassesEnum)int.Parse(line[line.Length - 1]);
                                     RecognitionEvaluation.Instance.Update(systemClass, realClass);
                                 }
                             }
@@ -87,8 +102,10 @@ namespace TrafficSignSystem.Library
                     }
                 }
             }
+            DetectionEvaluation.Instance.Calculate();
             RecognitionEvaluation.Instance.Calculate();
-            RecognitionEvaluation.Instance.Print(resultsFile);
+            DetectionEvaluation.Instance.Print(resultsFile);
+            RecognitionEvaluation.Instance.Print(resultsFile, true);
         }
 
         public void Test(AlgorithmsEnum algorithm, Parameters parameters)

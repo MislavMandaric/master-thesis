@@ -7,7 +7,7 @@ using System.IO;
 
 namespace TrafficSignSystem.Library
 {
-    public class RecognitionEvaluation
+    internal class RecognitionEvaluation
     {
         private static RecognitionEvaluation _instance;
 
@@ -33,10 +33,10 @@ namespace TrafficSignSystem.Library
         private int _falseNegative;
 
         private IDictionary<ClassesEnum, double> _precisions;
-        private IDictionary<ClassesEnum, double> _responses;
+        private IDictionary<ClassesEnum, double> _recalls;
         private IDictionary<ClassesEnum, double> _macroF1s;
         private double _precision;
-        private double _response;
+        private double _recall;
         private double _macroF1;
         private double _microF1;
 
@@ -48,7 +48,7 @@ namespace TrafficSignSystem.Library
             this._falseNegatives = new Dictionary<ClassesEnum, int>();
 
             this._precisions = new Dictionary<ClassesEnum, double>();
-            this._responses = new Dictionary<ClassesEnum, double>();
+            this._recalls = new Dictionary<ClassesEnum, double>();
             this._macroF1s = new Dictionary<ClassesEnum, double>();
         }
 
@@ -75,11 +75,11 @@ namespace TrafficSignSystem.Library
 
                 this._precisions[key] = (double)this.GetFromDictionary(this._truePositives, key) /
                     (this.GetFromDictionary(this._truePositives, key) + this.GetFromDictionary(this._falsePositives, key));
-                this._responses[key] = (double)this.GetFromDictionary(this._truePositives, key) /
+                this._recalls[key] = (double)this.GetFromDictionary(this._truePositives, key) /
                     (this.GetFromDictionary(this._truePositives, key) + this.GetFromDictionary(this._falseNegatives, key));
 
-                this._macroF1s[key] = 2 * this.GetFromDictionary(this._precisions, key) * this.GetFromDictionary(this._responses, key) /
-                    (this.GetFromDictionary(this._precisions, key) + this.GetFromDictionary(this._responses, key));
+                this._macroF1s[key] = 2 * this.GetFromDictionary(this._precisions, key) * this.GetFromDictionary(this._recalls, key) /
+                    (this.GetFromDictionary(this._precisions, key) + this.GetFromDictionary(this._recalls, key));
             }
             this._truePositive = this._truePositives.Sum(x => x.Value);
             this._trueNegative = this._trueNegatives.Sum(x => x.Value);
@@ -87,34 +87,34 @@ namespace TrafficSignSystem.Library
             this._falseNegative = this._falseNegatives.Sum(x => x.Value);
 
             this._precision = (double)this._truePositive / (this._truePositive + this._falsePositive);
-            this._response = (double)this._truePositive / (this._truePositive + this._falseNegative);
+            this._recall = (double)this._truePositive / (this._truePositive + this._falseNegative);
 
             this._macroF1 = this._macroF1s.Sum(x => x.Value) / this._macroF1s.Count;
-            this._microF1 = 2 * this._precision * this._response / (this._precision + this._response);
+            this._microF1 = 2 * this._precision * this._recall / (this._precision + this._recall);
         }
 
-        public void Print(string file)
+        public void Print(string file, bool append = false)
         {
-            using (StreamWriter writter = new StreamWriter(file))
+            using (StreamWriter writter = new StreamWriter(file, append))
             {
                 foreach (ClassesEnum key in Enum.GetValues(typeof(ClassesEnum)))
                 {
                     writter.WriteLine(key);
-                    writter.WriteLine("TP:\t\t{0}", this.GetFromDictionary(this._truePositives, key));
-                    writter.WriteLine("TN:\t\t{0}", this.GetFromDictionary(this._trueNegatives, key));
-                    writter.WriteLine("FP:\t\t{0}", this.GetFromDictionary(this._falsePositives, key));
-                    writter.WriteLine("FN:\t\t{0}", this.GetFromDictionary(this._falseNegatives, key));
-                    writter.WriteLine("P:\t\t{0}", this.GetFromDictionary(this._precisions, key));
-                    writter.WriteLine("R:\t\t{0}", this.GetFromDictionary(this._responses, key));
+                    writter.WriteLine("TP:\t\t\t{0}", this.GetFromDictionary(this._truePositives, key));
+                    writter.WriteLine("TN:\t\t\t{0}", this.GetFromDictionary(this._trueNegatives, key));
+                    writter.WriteLine("FP:\t\t\t{0}", this.GetFromDictionary(this._falsePositives, key));
+                    writter.WriteLine("FN:\t\t\t{0}", this.GetFromDictionary(this._falseNegatives, key));
+                    writter.WriteLine("P:\t\t\t{0}", this.GetFromDictionary(this._precisions, key));
+                    writter.WriteLine("R:\t\t\t{0}", this.GetFromDictionary(this._recalls, key));
                     writter.WriteLine("MF1:\t\t{0}", this.GetFromDictionary(this._macroF1s, key));
                     writter.WriteLine();
                 }
-                writter.WriteLine("TP:\t\t{0}", this._truePositive);
-                writter.WriteLine("TN:\t\t{0}", this._trueNegative);
-                writter.WriteLine("FP:\t\t{0}", this._falsePositive);
-                writter.WriteLine("FN:\t\t{0}", this._falseNegative);
-                writter.WriteLine("P:\t\t{0}", this._precision);
-                writter.WriteLine("R:\t\t{0}", this._response);
+                writter.WriteLine("TP:\t\t\t{0}", this._truePositive);
+                writter.WriteLine("TN:\t\t\t{0}", this._trueNegative);
+                writter.WriteLine("FP:\t\t\t{0}", this._falsePositive);
+                writter.WriteLine("FN:\t\t\t{0}", this._falseNegative);
+                writter.WriteLine("P:\t\t\t{0}", this._precision);
+                writter.WriteLine("R:\t\t\t{0}", this._recall);
                 writter.WriteLine("MF1:\t\t{0}", this._macroF1);
                 writter.WriteLine("mF1:\t\t{0}", this._microF1);
             }
@@ -128,20 +128,12 @@ namespace TrafficSignSystem.Library
                 dict[key] = 1;
         }
 
-        private int GetFromDictionary(IDictionary<ClassesEnum, int> dict, ClassesEnum key)
+        private T GetFromDictionary<T>(IDictionary<ClassesEnum, T> dict, ClassesEnum key)
         {
             if (dict.ContainsKey(key))
                 return dict[key];
             else
-                return 0;
-        }
-
-        private double GetFromDictionary(IDictionary<ClassesEnum, double> dict, ClassesEnum key)
-        {
-            if (dict.ContainsKey(key))
-                return dict[key];
-            else
-                return 0;
+                return default(T);
         }
     }
 }

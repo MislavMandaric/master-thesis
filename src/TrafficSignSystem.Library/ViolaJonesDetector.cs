@@ -9,7 +9,7 @@ using OpenCvSharp;
 
 namespace TrafficSignSystem.Library
 {
-    public class ViolaJonesDetector : IDetection, ITrainable, ITestable
+    internal class ViolaJonesDetector : IDetection, ITrainable, ITestable
     {
         private const string FEATURE_MODE = "BASIC";
         private const string FEATURE_TYPE = "HAAR";
@@ -17,9 +17,9 @@ namespace TrafficSignSystem.Library
         private const int BUFFER_SIZE = 1024;
         private const int WIDTH = 24;
         private const int HEIGHT = 24;
-        private const int STAGES = 20;
-        private const float MIN_HIT_RATE = 0.998f;
-        private const float MAX_FALSE_RATE = 0.4f;
+        private const int STAGES = 15;
+        private const float MIN_HIT_RATE = 0.996f;
+        private const float MAX_FALSE_RATE = 0.33f;
         private const float SCALE_FACTOR = 1.1f;
 
         private CvHaarClassifierCascade _haarCascadeClassifier;

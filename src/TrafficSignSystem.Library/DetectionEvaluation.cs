@@ -8,7 +8,7 @@ using OpenCvSharp;
 
 namespace TrafficSignSystem.Library
 {
-    public class DetectionEvaluation
+    internal class DetectionEvaluation
     {
         private static DetectionEvaluation _instance;
 
@@ -29,7 +29,7 @@ namespace TrafficSignSystem.Library
         private int _falseNegative;
 
         private double _precision;
-        private double _response;
+        private double _recall;
         private double _f1;
 
         private DetectionEvaluation() { }
@@ -54,23 +54,44 @@ namespace TrafficSignSystem.Library
             this._falsePositive += systemDetections.Count - realDetectionsHit.Count(x => x.Value);
         }
 
+        public void Update(IList<CvRect> systemDetections, IList<CvRect> realDetections, out IList<CvRect> truePositives)
+        {
+            Dictionary<CvRect, bool> realDetectionsHit = realDetections.ToDictionary(x => x, y => false);
+            foreach (CvRect real in realDetections)
+            {
+                double maxCoefficient = double.MinValue;
+                foreach (CvRect system in systemDetections)
+                {
+                    double coefficient = this.CalculateSimilarity(system, real);
+                    if (coefficient > maxCoefficient)
+                        maxCoefficient = coefficient;
+                }
+                if (maxCoefficient > HIT_TRESHOLD)
+                    realDetectionsHit[real] = true;
+            }
+            this._truePositive += realDetectionsHit.Count(x => x.Value);
+            this._falseNegative += realDetectionsHit.Count(x => !x.Value);
+            this._falsePositive += systemDetections.Count - realDetectionsHit.Count(x => x.Value);
+            truePositives = realDetectionsHit.Where(x => x.Value).Select(x => x.Key).ToList();
+        }
+
         public void Calculate()
         {
             this._precision = (double)this._truePositive / (this._truePositive + this._falsePositive);
-            this._response = (double)this._truePositive / (this._truePositive + this._falseNegative);
-            this._f1 = 2 * this._precision * this._response / (this._precision + this._response);
+            this._recall = (double)this._truePositive / (this._truePositive + this._falseNegative);
+            this._f1 = 2 * this._precision * this._recall / (this._precision + this._recall);
         }
 
-        public void Print(string file)
+        public void Print(string file, bool append = false)
         {
-            using (StreamWriter writter = new StreamWriter(file))
+            using (StreamWriter writter = new StreamWriter(file, append))
             {
-                writter.WriteLine("TP:\t\t{0}", this._truePositive);
-                writter.WriteLine("FP:\t\t{0}", this._falsePositive);
-                writter.WriteLine("FN:\t\t{0}", this._falseNegative);
-                writter.WriteLine("P:\t\t{0}", this._precision);
-                writter.WriteLine("R:\t\t{0}", this._response);
-                writter.WriteLine("F1:\t\t{0}", this._f1);
+                writter.WriteLine("TP:\t\t\t{0}", this._truePositive);
+                writter.WriteLine("FP:\t\t\t{0}", this._falsePositive);
+                writter.WriteLine("FN:\t\t\t{0}", this._falseNegative);
+                writter.WriteLine("P:\t\t\t{0}", this._precision);
+                writter.WriteLine("R:\t\t\t{0}", this._recall);
+                writter.WriteLine("F1:\t\t\t{0}", this._f1);
             }
         }
 

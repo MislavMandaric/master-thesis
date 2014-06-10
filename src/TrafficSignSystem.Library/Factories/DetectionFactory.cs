@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TrafficSignSystem.Library
 {
-    public static class DetectionFactory
+    internal static class DetectionFactory
     {
         public static IDetection GetDetection(AlgorithmsEnum algorithm, Parameters parameters)
         {

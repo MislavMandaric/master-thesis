@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TrafficSignSystem.Library
 {
-    public interface ITestable : IDisposable
+    internal interface ITestable : IDisposable
     {
         void Test(Parameters parameters);
     }

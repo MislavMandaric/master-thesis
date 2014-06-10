@@ -7,7 +7,7 @@ using OpenCvSharp;
 
 namespace TrafficSignSystem.Library
 {
-    public static class Preprocess
+    internal static class Preprocess
     {
         public static IplImage ViolaJonesPreprocess(IplImage image)
         {
@@ -17,7 +17,7 @@ namespace TrafficSignSystem.Library
             return preprocessedImage;
         }
 
-        public static IplImage RandomForestPreprocess(IplImage image, int width, int height)
+        public static IplImage RandomForestsPreprocess(IplImage image, int width, int height)
         {
             using (IplImage smallImage = new IplImage(new CvSize(width, height), image.Depth, image.ElemChannels))
             {
