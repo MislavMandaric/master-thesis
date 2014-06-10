@@ -9,11 +9,11 @@ namespace TrafficSignSystem.Test
 {
     public class RandomForestsSubOptions
     {
-        [Option('m', "model_file", Required = true, HelpText = "Path to file with model.")]
+        [Option('m', "model_file", Required = true, HelpText = "Path to file with learned model data.")]
         public string ModelFile { get; set; }
-        [Option('t', "test_file", Required = true, HelpText = "Path to file with test data.")]
+        [Option('t', "test_file", Required = true, HelpText = "Path to file with testing samples.")]
         public string TestFile { get; set; }
-        [Option('r', "results_file", Required = true, HelpText = "Path to file with results.")]
+        [Option('r', "results_file", Required = true, HelpText = "Path to file where results will be saved.")]
         public string ResultsFile { get; set; }
     }
 }

@@ -9,11 +9,11 @@ namespace TrafficSignSystem.Test
 {
     public class ViolaJonesSubOptions
     {
-        [Option('c', "cascade_file", Required = true, HelpText = "Path to file with cascade.")]
+        [Option('c', "cascade_file", Required = true, HelpText = "Path to file with learned cascade.")]
         public string CascadeFile { get; set; }
-        [Option('t', "test_file", Required = true, HelpText = "Path to file with test data.")]
+        [Option('t', "test_file", Required = true, HelpText = "Path to file with testing samples.")]
         public string TestFile { get; set; }
-        [Option('r', "results_file", Required = true, HelpText = "Path to file with results.")]
+        [Option('r', "results_file", Required = true, HelpText = "Path to file where results will be saved.")]
         public string ResultsFile { get; set; }
     }
 }
