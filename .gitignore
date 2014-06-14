@@ -176,3 +176,6 @@ FakesAssemblies/
 # OpenCV
 OpenCV.ffmpeg.overlay-Win32_v110.2.4.8
 OpenCV.overlay-Win32_v110_Release.2.4.8
+
+# Git
+.gitattributes

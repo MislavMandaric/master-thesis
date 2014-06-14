@@ -56,23 +56,30 @@ namespace TrafficSignSystem.Library
 
         public void Update(IList<CvRect> systemDetections, IList<CvRect> realDetections, out IList<CvRect> truePositives)
         {
+            truePositives = new List<CvRect>();
             Dictionary<CvRect, bool> realDetectionsHit = realDetections.ToDictionary(x => x, y => false);
             foreach (CvRect real in realDetections)
             {
                 double maxCoefficient = double.MinValue;
+                CvRect maxRect = new CvRect();
                 foreach (CvRect system in systemDetections)
                 {
                     double coefficient = this.CalculateSimilarity(system, real);
                     if (coefficient > maxCoefficient)
+                    {
                         maxCoefficient = coefficient;
+                        maxRect = system;
+                    }
                 }
                 if (maxCoefficient > HIT_TRESHOLD)
+                {
                     realDetectionsHit[real] = true;
+                    truePositives.Add(maxRect);
+                }
             }
             this._truePositive += realDetectionsHit.Count(x => x.Value);
             this._falseNegative += realDetectionsHit.Count(x => !x.Value);
             this._falsePositive += systemDetections.Count - realDetectionsHit.Count(x => x.Value);
-            truePositives = realDetectionsHit.Where(x => x.Value).Select(x => x.Key).ToList();
         }
 
         public void Calculate()

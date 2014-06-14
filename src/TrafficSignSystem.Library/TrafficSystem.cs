@@ -34,12 +34,12 @@ namespace TrafficSignSystem.Library
                             for (int i = 0; i < detections.Total; i++)
                             {
                                 CvRect rectangle = (CvRect)detections.GetSeqElem<CvRect>(i);
-                                image.Rectangle(rectangle, new CvScalar(255, 0, 0));
+                                image.Rectangle(rectangle, new CvScalar(0, 255, 0));
                                 using (IplImage signImage = image.GetSubImage(rectangle))
                                 {
                                     parameters[ParametersEnum.Image] = signImage;
                                     ClassesEnum recognizedClass = recognition.Recognize(parameters);
-                                    image.PutText(recognizedClass.ToString(), rectangle.TopLeft, new CvFont(FontFace.HersheyComplexSmall, 1, 1), new CvScalar(0, 0, 0));
+                                    image.PutText(recognizedClass.ToString(), rectangle.TopLeft, new CvFont(FontFace.HersheyComplexSmall, 1, 1), new CvScalar(255, 255, 255));
                                     Console.WriteLine(recognizedClass);
                                 }
                             }
