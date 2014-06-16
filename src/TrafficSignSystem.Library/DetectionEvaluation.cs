@@ -104,15 +104,6 @@ namespace TrafficSignSystem.Library
 
         private double CalculateSimilarity(CvRect system, CvRect real)
         {
-            //int l = system.Left > real.Left ? system.Left : real.Left;
-            //int r = system.Right < real.Right ? system.Right : real.Right;
-            //int t = system.Top > real.Top ? system.Top : real.Top;
-            //int b = system.Bottom < real.Bottom ? system.Bottom : real.Bottom;
-
-            //if (l > r || t > b)
-            //    return 0;
-
-            //int intersectionArea = (r - l) * (b - t);
             if (!system.IntersectsWith(real))
                 return 0;
 

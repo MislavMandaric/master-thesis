@@ -20,7 +20,7 @@ namespace TrafficSignSystem.Library
         public RandomForestsClassifier()
         {
             this._randomForests = new CvRTrees();
-            this._rfParams = new CvRTParams(15, 8, 0, false, 10, null, false, 0, new CvTermCriteria(CriteriaType.Iteration|CriteriaType.Epsilon, 200, 0.01));
+            this._rfParams = new CvRTParams(16, 8, 0, false, 10, null, false, 34, new CvTermCriteria(CriteriaType.Iteration|CriteriaType.Epsilon, 200, 0.005));
         }
 
         public RandomForestsClassifier(string modelFile)
